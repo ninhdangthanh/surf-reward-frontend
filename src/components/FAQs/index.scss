@@ -1,0 +1,6 @@
+.section-title-gradient {
+  @apply text-center text-[5.2rem] font-semibold bg-clip-text;
+
+  background-image: linear-gradient(191deg, rgb(253, 232, 71) 25%, rgb(217, 119, 6) 87%);
+  -webkit-text-fill-color: transparent;
+}

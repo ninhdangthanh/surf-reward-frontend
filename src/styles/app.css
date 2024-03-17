@@ -1,0 +1,31 @@
+.text-pre-sale {
+    color: #20262d;
+    animation: color-animation var(--duration) linear infinite;
+}
+
+.text-surf {
+    --color-1: #20262d;
+    --color-2: red;
+    --duration: 1s;
+}
+
+.text-middle {
+    --color-1: #20262d;
+    --color-2: blue;
+    --duration: 2s;
+}
+
+.text-earn {
+    --color-1: #20262d;
+    --color-2: yellow;
+    --duration: 3s;
+}
+
+@keyframes color-animation {
+    0% {
+        color: var(--color-1);
+    }
+    100% {
+        color: var(--color-2);
+    }
+}

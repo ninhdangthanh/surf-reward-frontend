@@ -1,0 +1,25 @@
+.footer {
+  .logo {
+    @apply w-[130px] h-auto object-contain;
+  }
+
+  .menu-container {
+    @apply grid grid-cols-4 gap-4 flex-1 col-span-4;
+  }
+
+  .menu-title {
+    @apply text-white font-bold text-sm;
+  }
+
+  .menu-link {
+    @apply text-gray-300 text-lg hover:text-white transition-all;
+  }
+
+  .menu-text {
+    @apply text-gray-300 text-base;
+  }
+
+  .menu-icon {
+    @apply w-6 h-6 cursor-pointer;
+  }
+}

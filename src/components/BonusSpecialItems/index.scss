@@ -1,0 +1,20 @@
+.pricing-plan {
+  letter-spacing: 0;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(to right, #b16cea, #ff5e69 38%, #ff8a56 73%, #ffa84b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  margin-bottom: 32px;
+  padding-bottom: 0;
+  font-family: Montserrat, sans-serif;
+  font-weight: 700;
+  line-height: 120%;
+}
+
+.button-gradient {
+  @apply transition-all;
+
+  &:hover {
+    background-image: linear-gradient(to right, #b16cea, #ff5e69 46%, #ffa84b);
+  }
+}
