@@ -1,10 +1,10 @@
-import { HTMLProps, ReactNode } from 'react';
+import { HTMLProps, ReactNode } from "react";
 
-import { Footer, Header } from '@/components/Sections/Home';
+import { Footer, Header } from "@/components/Sections/Home";
 
 export interface DefaultLayoutProps {
   children: ReactNode;
-  className?: HTMLProps<HTMLElement>['className'];
+  className?: HTMLProps<HTMLElement>["className"];
 }
 
 const DefaultLayout = ({ children, className }: DefaultLayoutProps) => {

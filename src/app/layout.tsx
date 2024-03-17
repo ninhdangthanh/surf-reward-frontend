@@ -1,15 +1,16 @@
-"use client";
-
+/* eslint-disable @next/next/no-document-import-in-page */
 import type { Metadata } from 'next';
 
 import '@/styles/app.css';
 import '@/styles/index.css';
 
-import { config } from '@/config/config';
-import { WagmiProvider } from "wagmi";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient() 
+export const metadata: Metadata = {
+  title: 'SURF Reward',
+  description: 'WELCOME TO SURF REWARD - BIGGEST PRESALE 2024! WHAT DO YOU THINK? 100X OR MORE!?',
+  icons: {
+    icon: '/public/favicon.ico', // /public path
+  },
+};
 
 export default function RootLayout({
   children,
@@ -18,11 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
-          <body>{children}</body>
-        </QueryClientProvider>
-      </WagmiProvider>
+      <body>{children}</body>
     </html>
   );
 }

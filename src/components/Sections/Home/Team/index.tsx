@@ -62,14 +62,14 @@ const Team = () => {
         Manager)
       </p>
       <div className="lg:-mt-10">
-        <BoxAnimation className="lg:w-[40%] xl:-[30%]">
+        <BoxAnimation className="lg:w-[30%] xl:-[30%] relative z-[2]">
           <Image
             src={KoeImage1}
             alt="Koe Image"
             className="w-full object-contain lg:translate-y-[110%] rounded-lg"
           />
         </BoxAnimation>
-        <BoxAnimation className="bg-[#151b22] p-[32px] md:p-[64px] rounded-xl lg:pt-[96px] xl:py-[7.8rem] lg:pl-[128px] lg:pr-[64px] xl:pl-[10.4rem] xl:pr-[5.2rem] -mt-5 lg:mt-[5.2rem] lg:w-[72%] ml-auto">
+        <BoxAnimation className="bg-[#151b22] p-[32px] md:p-[64px] rounded-xl lg:pt-[96px] xl:py-[7.8rem] lg:pl-[128px] lg:pr-[64px] xl:pl-[10.4rem] xl:pr-[5.2rem] -mt-5 lg:mt-[5.2rem] lg:w-[72%] ml-auto relative z-0">
           <h2 className="text-gray-100 text-[36px] md:text-[40px] lg:text-[48px] xl:text-[3.91rem]">
             About us
           </h2>
@@ -87,6 +87,7 @@ const Team = () => {
           <ButtonPrimary className="">Check out the team</ButtonPrimary>
         </BoxAnimation>
       </div>
+
       <div className="grid lg:grid-cols-2 gap-10 lg:gap-28 mt-14 px-[1.6rem]">
         <BoxAnimation>
           <div className="relative">
@@ -128,7 +129,7 @@ const Team = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="hidden md:block"></div>
           {ourAdvisors.map((advisor, index) => (
-            <BoxAnimation>
+            <BoxAnimation key={index}>
               <div key={index} className="flex flex-col items-center">
                 <Image
                   src={advisor.image}
