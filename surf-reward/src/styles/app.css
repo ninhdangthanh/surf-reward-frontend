@@ -1,0 +1,40 @@
+:root {
+    --gradient-surf: linear-gradient(139deg, rgb(32, 129, 212), rgb(211, 38, 248) 73%, rgb(213, 36, 247)) text
+        transparent;
+    --gradient-2: radial-gradient(circle farthest-side at -25% -50%, rgb(67, 56, 202), rgba(255, 251, 235, 0)) text,
+        linear-gradient(285deg, rgb(125, 211, 252), rgb(239, 72, 72)) transparent;
+    --gradient-earn: linear-gradient(141deg, rgb(34, 126, 210), rgb(84, 235, 180) 58%, rgb(124, 195, 255)) text
+        transparent;
+}
+
+.text-pre-sale {
+    color: #20262d;
+    animation: color-animation var(--duration) linear infinite;
+}
+
+.text-surf {
+    --color-1: #20262d;
+    --color-2: red;
+    --duration: 1s;
+}
+
+.text-middle {
+    --color-1: #20262d;
+    --color-2: blue;
+    --duration: 2s;
+}
+
+.text-earn {
+    --color-1: #20262d;
+    --color-2: yellow;
+    --duration: 3s;
+}
+
+@keyframes color-animation {
+    0% {
+        color: var(--color-1);
+    }
+    100% {
+        color: var(--color-2);
+    }
+}
