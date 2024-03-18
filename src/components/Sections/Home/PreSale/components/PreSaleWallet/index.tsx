@@ -63,41 +63,41 @@ const PreSaleWallet = () => {
 
   const USDTcontract = new ethers.Contract(USDTaAddress, tokenABI, ETHprovider);
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setRemainingSeconds((prev) => prev - 1);
-  //   }, 800);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRemainingSeconds((prev) => prev - 1);
+    }, 800);
 
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // });
+    return () => {
+      clearInterval(timer);
+    };
+  });
 
-  // const time = useMemo(() => {
-  //   const days = Math.floor(remainingSeconds / (60 * 60 * 24));
-  //   const hours = Math.floor((remainingSeconds % (60 * 60 * 24)) / (60 * 60));
-  //   const minutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
-  //   const seconds = remainingSeconds % 60;
+  const time = useMemo(() => {
+    const days = Math.floor(remainingSeconds / (60 * 60 * 24));
+    const hours = Math.floor((remainingSeconds % (60 * 60 * 24)) / (60 * 60));
+    const minutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+    const seconds = remainingSeconds % 60;
 
-  //   return [
-  //     {
-  //       label: 'Day',
-  //       value: days && days < 10 ? `0${days}` : days,
-  //     },
-  //     {
-  //       label: 'Hours',
-  //       value: hours,
-  //     },
-  //     {
-  //       label: 'Minutes',
-  //       value: minutes,
-  //     },
-  //     {
-  //       label: 'Seconds',
-  //       value: seconds,
-  //     },
-  //   ];
-  // }, [remainingSeconds]);
+    return [
+      {
+        label: 'Day',
+        value: days && days < 10 ? `0${days}` : days,
+      },
+      {
+        label: 'Hours',
+        value: hours,
+      },
+      {
+        label: 'Minutes',
+        value: minutes,
+      },
+      {
+        label: 'Seconds',
+        value: seconds,
+      },
+    ];
+  }, [remainingSeconds]);
   const [startFocusBtnConnectWallet, setStartFocusBtnConnectWallet] = useState<boolean>(false);
 
   let networkID = {
@@ -304,7 +304,7 @@ const PreSaleWallet = () => {
         <div className={`w-[500px] mt-24`}>
           <div className="bg-blue-700 pb-4 rounded-tl-2xl rounded-tr-2xl px-4 pt-2">
             <div className="text-white">
-              {/* <div className="flex flex-row justify-center items-center gap-4">
+              <div className="flex flex-row justify-center items-center gap-4">
                 {time.map((item, index) => (
                   <div key={index} className="flex flex-col items-center justify-center">
                     <div className="flex flex-row items-center">
@@ -328,7 +328,7 @@ const PreSaleWallet = () => {
                     </span>
                   </div>
                 ))}
-              </div> */}
+              </div>
             </div>
             <div className="meter">
               <span></span>
