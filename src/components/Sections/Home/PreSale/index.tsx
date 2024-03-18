@@ -6,6 +6,13 @@ import "./index.scss";
 import PreSaleWallet from "./components/PreSaleWallet";
 import ButtonPrimary from "../../../ButtonPrimary";
 
+import { config } from '@/config/config';
+import { WagmiProvider } from "wagmi";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+
+const queryClient = new QueryClient() 
+
 const PreSale = () => {
   const [activeText, setActiveText] = useState<string>("SURF");
   const timerChangeColorText = useRef<any>();
@@ -55,7 +62,11 @@ const PreSale = () => {
             <ButtonPrimary className="btn btn-pitch">Pitch Deck</ButtonPrimary>
           </div>
         </div>
-        <PreSaleWallet />
+        <WagmiProvider config={config}>
+          <QueryClientProvider client={queryClient}>
+            <PreSaleWallet />
+          </QueryClientProvider>
+        </WagmiProvider>
       </div>
     </div>
   );

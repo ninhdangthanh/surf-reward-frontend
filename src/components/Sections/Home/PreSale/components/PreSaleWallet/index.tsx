@@ -23,6 +23,7 @@ import { parseEther } from 'viem'
 import Loading from '@/components/Loading';
 
 
+
 const tokenByType: {
   [key: string]: {
     img: StaticImageData;
@@ -45,17 +46,22 @@ const tokenByType: {
 
 const PreSaleWallet = () => {
   const [remainingSeconds, setRemainingSeconds] = useState<number>(315703);
-  const [switchToken, setSwitchToken] = useState<string>('ETH');
+  const [isETH, setIsETH] = useState(false) // quan ly network
+  const [switchToken, setSwitchToken] = useState<string>(isETH ? 'ETH' : 'BNB'); // quan ly button mua
 
-  const provider = new ethers.providers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
+  const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
+  const BNBprovider = new ethers.providers.JsonRpcProvider("https://bsc-testnet-rpc.publicnode.com")
 
-  const tokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
+  const ETHtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
+  const BNBtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
   const USDTaAddress = "0x29ed8cE3cA1CcF72838AdC691726603b42d8b799";
 
   const tokenABI = sellTokenABIjson;
 
-  const tokenContract = new ethers.Contract(tokenAddress, tokenABI, provider);
-  const USDTcontract = new ethers.Contract(USDTaAddress, tokenABI, provider);
+  const ETHtokenContract = new ethers.Contract(ETHtokenAddress, tokenABI, ETHprovider);
+  const BNBtokenContract = new ethers.Contract(BNBtokenAddress, tokenABI, BNBprovider);
+
+  const USDTcontract = new ethers.Contract(USDTaAddress, tokenABI, ETHprovider);
 
   // useEffect(() => {
   //   const timer = setInterval(() => {
@@ -94,7 +100,6 @@ const PreSaleWallet = () => {
   // }, [remainingSeconds]);
   const [startFocusBtnConnectWallet, setStartFocusBtnConnectWallet] = useState<boolean>(false);
 
-  const [isETH, setIsETH] = useState(true)
   let networkID = {
     ETH: 11155111,
     Binance: 56
@@ -107,6 +112,7 @@ const PreSaleWallet = () => {
   const [tokenCount, setTokenCount] = useState(0.0)
 
   const isSwitchNetwork = useMemo(() => { 
+    return true
     if(isETH) {
       return chainId == 11155111
     } else {
@@ -119,6 +125,7 @@ const PreSaleWallet = () => {
   const [inputApprove, setInputApprove] = useState(0.0)
   const [oneUsdToToken, setOneUsdToToken] = useState(0)
   const [ETHprice, setETHprice] = useState(0)
+  const [BNBprice, setBNBprice] = useState(0)
   const [allowanceUSDTShow, setAllowanceUSDTShow] = useState(0)
   const [allowaneLoading, setAllowaneLoading] = useState(false)
 
@@ -135,16 +142,19 @@ const PreSaleWallet = () => {
   }, [chainId, isConnected])
   
   const getUSDprice = async () => {
-    const oneUsdToToken = await tokenContract.oneUsdToToken();
+    const oneUsdToToken = await ETHtokenContract.oneUsdToToken();
     setOneUsdToToken(Number(oneUsdToToken))
-    const getChainlinkDataFeedLatestAnswer = await tokenContract.getChainlinkDataFeedLatestAnswer();
-    setETHprice(Number(getChainlinkDataFeedLatestAnswer))
-    // console.log("oneUsdToToken", oneUsdToToken.toString(),
-    // getChainlinkDataFeedLatestAnswer.toString());
+    if(isETH) {
+      const getChainlinkDataFeedLatestAnswer = await ETHtokenContract.getChainlinkDataFeedLatestAnswer();
+      setETHprice(Number(getChainlinkDataFeedLatestAnswer))
+    } else {
+      // const getChainlinkDataFeedLatestAnswer = await BNBtokenContract.getChainlinkDataFeedLatestAnswer();
+      setBNBprice(Number(12))
+    }
   }
 
   const getAllowanceUSDT = async () => {
-    const allowanceUSDT = await USDTcontract.allowance(address, tokenAddress);
+    const allowanceUSDT = await USDTcontract.allowance(address, ETHtokenAddress);
     const USDTallowance = Number(allowanceUSDT) / (10 ** 18)
     setAllowanceUSDTShow(USDTallowance)
   }
@@ -156,7 +166,7 @@ const PreSaleWallet = () => {
 
       // let amount = amountInput * (10 ** 18);
       
-      sendTransaction({ to: tokenAddress, value: parseEther(`${amountInput}`) })
+      sendTransaction({ to: ETHtokenAddress, value: parseEther(`${amountInput}`) })
     } catch (error) {
       setAllowaneLoading(false);
     }
@@ -181,7 +191,7 @@ const PreSaleWallet = () => {
     try {
       setAllowaneLoading(true);
       writeContract({
-        address: tokenAddress,
+        address: ETHtokenAddress,
         abi: sellTokenABI,
         functionName: 'buyTokenWithUSDT',
         args: [amountInput],
@@ -232,11 +242,22 @@ const PreSaleWallet = () => {
   const onChangeAmountInput = async (value: number) => {
     setAmountInput(value);
     let token;
-    if (switchToken == 'ETH') {
-      token =  value * oneUsdToToken * ETHprice;
+    if(chainId ==  11155111) {
+      // ETH
+      if (switchToken == 'ETH') {
+        token =  value * oneUsdToToken * ETHprice;
+      } else {
+        token = value * oneUsdToToken;
+      }
     } else {
-      token = value * oneUsdToToken;
+      // BNB
+      if (switchToken == 'BNB' || switchToken == 'ETH') {
+        token =  value * oneUsdToToken * BNBprice;
+      } else {
+        token = value * oneUsdToToken;
+      }
     }
+    
     setTokenCount(token)
   }
 
@@ -253,7 +274,7 @@ const PreSaleWallet = () => {
       address: USDTaAddress,
       abi: sellTokenABI,
       functionName: 'approve',
-      args: [tokenAddress, BigInt(inputApprove * 10 ** 18)],
+      args: [ETHtokenAddress, BigInt(inputApprove * 10 ** 18)],
     })
   } 
 
@@ -405,7 +426,7 @@ const PreSaleWallet = () => {
                                 : 'text-black'
                             }`}
                           >
-                            {tokenByType.ETH.label}
+                            {tokenByType.BNB.label}
                           </span>
                         </ButtonInk>}
                         <ButtonInk
@@ -452,7 +473,7 @@ const PreSaleWallet = () => {
                           step="0.001"
                           className='mt-2'
                         />
-                        {isConfirmingApproveHash && <strong>Confirming...........</strong>}
+                        
                         <button
                           onClick={() => approveAllowce()}
                           className={"bg-blue-600 leading-[0px] h-[22px] mt-4 block rounded-xl w-full py-5 px-2 text-white text-xl"}                          
@@ -462,9 +483,9 @@ const PreSaleWallet = () => {
                     </div>}
 
                     <div className="py-6 space-y-12">
-                      <Input
+                      {isETH ? <Input
                         type="number"
-                        label={`${tokenByType[switchToken].label} you will pay (must less then Amount allowance:)`}
+                        label={`ETH you will pay`}
                         value={`${amountInput}`}
                         onChange={(e) => onChangeAmountInput(Number(e.target.value))}
                         placeholder="Enter amount"
@@ -478,7 +499,24 @@ const PreSaleWallet = () => {
                             className="w-8 h-8 mr-2"
                           />
                         }
-                      />
+                      /> :  
+                      <Input
+                        type="number"
+                        label={`BNB you will pay`}
+                        value={`${amountInput}`}
+                        onChange={(e) => onChangeAmountInput(Number(e.target.value))}
+                        placeholder="Enter amount"
+                        labelPlacement="outside"
+                        size="lg"
+                        step="0.001"
+                        endContent={
+                          <Image
+                            src={tokenByType[switchToken].img}
+                            alt={tokenByType[switchToken].label}
+                            className="w-8 h-8 mr-2"
+                          />
+                        }
+                      />}
 
                       <Input
                         type="number"
