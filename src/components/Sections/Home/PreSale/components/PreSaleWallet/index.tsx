@@ -21,6 +21,16 @@ import {abi as sellTokenABI} from "@/abi/sellTokenABI"
 import {ethers} from "ethers"
 import { parseEther } from 'viem' 
 import Loading from '@/components/Loading';
+import { MetaMaskInpageProvider } from '@metamask/providers';
+
+
+
+// CONST
+// const eth_mainnet_network = 1
+const eth_mainnet_network = 11155111
+
+// const bnb_mainnet_network = 1
+const bnb_mainnet_network = 5
 
 
 
@@ -46,7 +56,7 @@ const tokenByType: {
 
 const PreSaleWallet = () => {
   const [remainingSeconds, setRemainingSeconds] = useState<number>(315703);
-  const [isETH, setIsETH] = useState(false) // quan ly network
+  const [isETH, setIsETH] = useState(true) // quan ly network
   const [switchToken, setSwitchToken] = useState<string>(isETH ? 'ETH' : 'BNB'); // quan ly button mua
 
   const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
@@ -99,11 +109,6 @@ const PreSaleWallet = () => {
     ];
   }, [remainingSeconds]);
   const [startFocusBtnConnectWallet, setStartFocusBtnConnectWallet] = useState<boolean>(false);
-
-  let networkID = {
-    ETH: 11155111,
-    Binance: 56
-  }
   
   const [isNetworkCorrect, setIsNetworkCorrect] = useState(false)
   const { address, isConnected, chainId  } = useAccount({config: config})
@@ -112,20 +117,46 @@ const PreSaleWallet = () => {
   const [tokenCount, setTokenCount] = useState(0.0)
 
   const isSwitchNetwork = useMemo(() => { 
-    return true
+    // console.log("chainId == bnb_mainnet_network", chainId , bnb_mainnet_network);
+    
+    // return true
     if(isETH) {
-      return chainId == 11155111
+      return chainId == eth_mainnet_network
     } else {
-      return chainId == 56
+      return chainId == bnb_mainnet_network
     }
   }, [chainId, isConnected]);
+
+  async function switchToMainnet() {
+    onChangeAmountInput(0)
+    try {
+      const ethereum = window.ethereum as MetaMaskInpageProvider;
+      // Sepolia
+      await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0xaa36a7' }] });
+      setIsETH(true)
+      setSwitchToken('ETH')
+    } catch (error) {
+      console.error("Lỗi khi chuyển mạng:", error);
+    }
+  }
+  
+  async function switchToBNB() {
+    try {
+      const ethereum = window.ethereum as MetaMaskInpageProvider;
+      // Goerli
+      await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x5' }] });
+      setIsETH(false)
+      setSwitchToken('BNB')
+    } catch (error) {
+      console.error("Lỗi khi chuyển mạng:", error);
+    }
+  }
 
   const [isOpenModelSelectNetwork, setIsOpenModelSelectNetwork] = useState(false)
   const [amountInput, setAmountInput] = useState(0.0)
   const [inputApprove, setInputApprove] = useState(0.0)
   const [oneUsdToToken, setOneUsdToToken] = useState(0)
   const [ETHprice, setETHprice] = useState(0)
-  const [BNBprice, setBNBprice] = useState(0)
   const [allowanceUSDTShow, setAllowanceUSDTShow] = useState(0)
   const [allowaneLoading, setAllowaneLoading] = useState(false)
 
@@ -144,13 +175,8 @@ const PreSaleWallet = () => {
   const getUSDprice = async () => {
     const oneUsdToToken = await ETHtokenContract.oneUsdToToken();
     setOneUsdToToken(Number(oneUsdToToken))
-    if(isETH) {
-      const getChainlinkDataFeedLatestAnswer = await ETHtokenContract.getChainlinkDataFeedLatestAnswer();
-      setETHprice(Number(getChainlinkDataFeedLatestAnswer))
-    } else {
-      // const getChainlinkDataFeedLatestAnswer = await BNBtokenContract.getChainlinkDataFeedLatestAnswer();
-      setBNBprice(Number(12))
-    }
+    const getChainlinkDataFeedLatestAnswer = await ETHtokenContract.getChainlinkDataFeedLatestAnswer();
+    setETHprice(Number(getChainlinkDataFeedLatestAnswer))
   }
 
   const getAllowanceUSDT = async () => {
@@ -242,7 +268,7 @@ const PreSaleWallet = () => {
   const onChangeAmountInput = async (value: number) => {
     setAmountInput(value);
     let token;
-    if(chainId ==  11155111) {
+    if(chainId ==  eth_mainnet_network) {
       // ETH
       if (switchToken == 'ETH') {
         token =  value * oneUsdToToken * ETHprice;
@@ -252,7 +278,7 @@ const PreSaleWallet = () => {
     } else {
       // BNB
       if (switchToken == 'BNB' || switchToken == 'ETH') {
-        token =  value * oneUsdToToken * BNBprice;
+        token =  value * oneUsdToToken * ETHprice / 6.25;
       } else {
         token = value * oneUsdToToken;
       }
@@ -373,10 +399,13 @@ const PreSaleWallet = () => {
                   </div>
 
                   <div className="pt-1 border-t-2 border-gray-1 py-2 px-2">
-                    <div onClick={() => {
-                      console.log("Switch", networkID.Binance);
+                    <div onClick={async () => {
+                      try {
+                        isETH ? await switchToBNB() : await switchToMainnet()
+                        onChangeAmountInput(0)
+                      } catch (error) {
+                      }
                       
-                      isETH ? switchChain({ chainId: networkID.Binance}) : switchChain({ chainId: networkID.ETH})
                     }} className="cursor-pointer text-blue-700 font-medium text-[18.5px] my-3">
                       {isETH ? "Switch network to buy with BNB" : "Switch network to buy with ETH"}
                     </div>
@@ -589,7 +618,7 @@ const PreSaleWallet = () => {
       </div>
 
       <ConnectWalletModal visible={isOpenModelSelectNetwork} setIsOpenModelSelectNetwork={setIsOpenModelSelectNetwork} />
-      {!isNetworkCorrect && <SwitchNetworkModal isETH={isETH} />}
+      {!isNetworkCorrect && <SwitchNetworkModal switchToMainnet={switchToMainnet} switchToBNB={switchToBNB} isETH={isETH} />}
     </>
   );
 };

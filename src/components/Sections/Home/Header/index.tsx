@@ -81,7 +81,7 @@ const Header = () => {
   };
 
   const handleCloseSidebarWhenResize = (value: any) => {
-    console.log('🚀 ~ handleCloseSidebarWhenResize ~ value:', value);
+    // console.log('🚀 ~ handleCloseSidebarWhenResize ~ value:', value);
     if (
       value.currentTarget &&
       value.currentTarget?.innerWidth &&
