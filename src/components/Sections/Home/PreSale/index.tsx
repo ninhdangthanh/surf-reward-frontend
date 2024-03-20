@@ -37,7 +37,7 @@ const PreSale = () => {
   return (
     <div className="presale-grid-view">
       <div className=" flex flex-col xl:flex-row justify-center items-center xl:justify-between container mx-auto pb-[96px] px-28">
-        <div className="flex flex-col justify-center items-center w-full xl:w-1/2">
+        <div className="flex flex-col justify-center items-center w-full xl:w-2/5">
           <div className="py-[100px] flex flex-col justify-center items-center">
             {preSaleText.map((item, index) => (
               <h1
@@ -53,10 +53,10 @@ const PreSale = () => {
             ))}
           </div>
           <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 pb-[96px]">
-            <ButtonPrimary className="btn btn-whitepaper">
-              Whitepaper
+            <ButtonPrimary className="btn btn-whitepaper flex items-center justify-center">
+              <div>Whitepaper</div>
             </ButtonPrimary>
-            <ButtonPrimary className="btn btn-audit !bg-transparent">
+            <ButtonPrimary className="btn btn-audit !bg-transparent border-1">
               Token Audit
             </ButtonPrimary>
             <ButtonPrimary className="btn btn-pitch">Pitch Deck</ButtonPrimary>
