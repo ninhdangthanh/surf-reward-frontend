@@ -6,11 +6,30 @@ import ArrowDownSvg from '@/assets/svg/arrow-down.svg';
 import { ButtonPrimary, Container } from '@/components';
 import DefaultLayout from '@/layout/DefaultLayout';
 import './index.scss';
+import { usePathname, useRouter } from 'next/navigation';
 
 const StackingPage = () => {
+  const path = usePathname();
+  const router = useRouter();
+
+  const handleLanguageChange = (newLocale: string) => {
+    console.log("router", path);
+
+    let thisLanguage = path.slice(1, 3);
+    let newPath = path.slice(3, )
+    if (thisLanguage == 'vi') {
+      newPath = "/en" + newPath
+    } else {
+      newPath = "/vi" + newPath
+    }
+    
+    router.push(newPath);
+  };
+  
   return (
     <DefaultLayout>
       <div className="bg-underline">
+      <button style={{color: 'white', borderColor: 'white'}} onClick={() => handleLanguageChange('vi')}> Switch language</button>
         <Container>
           <p className="text-[yellow] text-center text-lg md:text-xl xl:text-[22px] my-6">
             Welcome to our staking app.

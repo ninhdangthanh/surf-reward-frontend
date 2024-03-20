@@ -25,12 +25,23 @@ import { MetaMaskInpageProvider } from '@metamask/providers';
 
 
 
-// CONST
-// const eth_mainnet_network = 1
+// TESTNET
 const eth_mainnet_network = 11155111
-
-// const bnb_mainnet_network = 1
 const bnb_mainnet_network = 5
+const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
+const BNBprovider = new ethers.providers.JsonRpcProvider("https://bsc-testnet-rpc.publicnode.com")
+const ETHtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
+const BNBtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
+const USDTaAddress = "0x29ed8cE3cA1CcF72838AdC691726603b42d8b799";
+
+// TESTNET
+// const eth_mainnet_network = 1
+// const bnb_mainnet_network = 56
+// const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-rpc.publicnode.com");
+// const BNBprovider = new ethers.providers.JsonRpcProvider("https://bsc-rpc.publicnode.com")
+// const ETHtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
+// const BNBtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
+// const USDTaAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
 
 
 
@@ -58,13 +69,6 @@ const PreSaleWallet = () => {
   const [remainingSeconds, setRemainingSeconds] = useState<number>(315703);
   const [isETH, setIsETH] = useState(true) // quan ly network
   const [switchToken, setSwitchToken] = useState<string>(isETH ? 'ETH' : 'BNB'); // quan ly button mua
-
-  const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
-  const BNBprovider = new ethers.providers.JsonRpcProvider("https://bsc-testnet-rpc.publicnode.com")
-
-  const ETHtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
-  const BNBtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
-  const USDTaAddress = "0x29ed8cE3cA1CcF72838AdC691726603b42d8b799";
 
   const tokenABI = sellTokenABIjson;
 
@@ -158,13 +162,14 @@ const PreSaleWallet = () => {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
 
-      const amountToSend = ethers.utils.parseEther("0.3");
+      const amountToSend = ethers.utils.parseEther(`${amountInput}`);
 
       const tx = {
           to: ETHtokenAddress,
           // to: '0xe0012A0aEf3BaC2F1751c6b60999a4d039A31809',
           value: amountToSend,
-          gasLimit: BigInt(10000000) 
+          gasLimit: BigInt(10000000),
+          gasPrice: await provider.getGasPrice()
       };
 
       const txResponse = await signer.sendTransaction(tx);

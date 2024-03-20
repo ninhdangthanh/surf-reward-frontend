@@ -9,11 +9,28 @@ import ButtonPrimary from "../../../ButtonPrimary";
 import { config } from '@/config/config';
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { usePathname, useRouter } from "next/navigation";
 
 
 const queryClient = new QueryClient() 
 
 const PreSale = () => {
+  const path = usePathname();
+  const router = useRouter();
+
+  const handleLanguageChange = (newLocale: string) => {
+    let thisLanguage = path.slice(1, 3);
+    let newPath = path.slice(3, )
+    if (thisLanguage == 'vi') {
+      newPath = "/en" + newPath
+    } else {
+      newPath = "/vi" + newPath
+    }
+    
+    router.push(newPath);
+  };
+  
+  
   const [activeText, setActiveText] = useState<string>("SURF");
   const timerChangeColorText = useRef<any>();
 
@@ -60,6 +77,7 @@ const PreSale = () => {
               Token Audit
             </ButtonPrimary>
             <ButtonPrimary className="btn btn-pitch">Pitch Deck</ButtonPrimary>
+            <button style={{color: 'white', borderColor: 'white'}} onClick={() => handleLanguageChange('vi')}> Switch language</button>
           </div>
         </div>
         <WagmiProvider config={config}>
