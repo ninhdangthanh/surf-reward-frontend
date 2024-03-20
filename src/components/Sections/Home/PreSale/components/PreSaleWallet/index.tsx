@@ -112,8 +112,6 @@ const PreSaleWallet = () => {
   
   const [isNetworkCorrect, setIsNetworkCorrect] = useState(false)
   const { address, isConnected, chainId  } = useAccount({config: config})
-  const { chains, switchChain } = useSwitchChain()
-  const [ethToToken, setEthToToken] = useState(0.0)
   const [tokenCount, setTokenCount] = useState(0.0)
 
   const isSwitchNetwork = useMemo(() => { 
@@ -153,7 +151,7 @@ const PreSaleWallet = () => {
     }
   }
 
-  async function sendETH() {
+  async function buyWithETH() {
     try {
       const ethereum = window.ethereum;
   
@@ -215,19 +213,6 @@ const PreSaleWallet = () => {
     const allowanceUSDT = await USDTcontract.allowance(address, ETHtokenAddress);
     const USDTallowance = Number(allowanceUSDT) / (10 ** 18)
     setAllowanceUSDTShow(USDTallowance)
-  }
-
-  const buyTokenWithETH = async () => {
-    try {
-      console.log("send buyTokenWithETH");
-      setAllowaneLoading(true);
-
-      // let amount = amountInput * (10 ** 18);
-      
-      sendTransaction({ to: ETHtokenAddress, value: parseEther(`${amountInput}`) })
-    } catch (error) {
-      setAllowaneLoading(false);
-    }
   }
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = 
@@ -592,10 +577,10 @@ const PreSaleWallet = () => {
                     </div>
 
                     <div className="flex flex-col gap-3">
-                      {switchToken == 'ETH' ? <Button
+                      {(switchToken == 'ETH' || switchToken == 'BNB') ? <Button
                         className={amountInput <= 0 ? "bg-gray-600 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl":
                         "bg-blue-700 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl"}
-                        onClick={() => sendETH()}
+                        onClick={() => buyWithETH()}
                         disabled={amountInput <= 0}
                       >
                         Buy Now
