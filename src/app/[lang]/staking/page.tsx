@@ -29,7 +29,6 @@ const StackingPage = () => {
   return (
     <DefaultLayout>
       <div className="bg-underline">
-      <button style={{color: 'white', borderColor: 'white'}} onClick={() => handleLanguageChange('vi')}> Switch language</button>
         <Container>
           <p className="text-[yellow] text-center text-lg md:text-xl xl:text-[22px] my-6">
             Welcome to our staking app.

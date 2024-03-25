@@ -11,9 +11,8 @@ import useTranslate from '@/hooks/useTranslate';
 
 const { PreSale, About, HowItWork, BonusSpecials, SurfToken, RoadMap, Team, FAQs } = HomeSection;
 
-const isConnectWallet = sessionStorage.getItem(STORAGE.IS_CONNECT_WALLET)
-  ? JSON.parse(sessionStorage.getItem(STORAGE.IS_CONNECT_WALLET)!)
-  : '';
+const isConnectWallet = true;
+
 
 export default function Home({ params: { lang } }: { params: { lang: string } }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);

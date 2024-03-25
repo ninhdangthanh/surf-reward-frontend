@@ -34,7 +34,7 @@ const ETHtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
 const BNBtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
 const USDTaAddress = "0x29ed8cE3cA1CcF72838AdC691726603b42d8b799";
 
-// TESTNET
+// MAINNET
 // const eth_mainnet_network = 1
 // const bnb_mainnet_network = 56
 // const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-rpc.publicnode.com");
@@ -118,17 +118,6 @@ const PreSaleWallet = () => {
   const { address, isConnected, chainId  } = useAccount({config: config})
   const [tokenCount, setTokenCount] = useState(0.0)
 
-  const isSwitchNetwork = useMemo(() => { 
-    // console.log("chainId == bnb_mainnet_network", chainId , bnb_mainnet_network);
-    if (isConnected) {
-      if(isETH) {
-        return chainId == eth_mainnet_network
-      } else {
-        return chainId == bnb_mainnet_network
-      }
-    }
-    return true
-  }, [chainId, isConnected]);
 
   async function switchToMainnet() {
     onChangeAmountInput(0)
@@ -200,11 +189,21 @@ const PreSaleWallet = () => {
   const { disconnect } = useDisconnect()
   const [isConnectedWallet, setIsConnectedWallet] = useState(false)
 
-  useEffect(() => {
-    setIsNetworkCorrect(isSwitchNetwork)
-    if(isConnected == false) {
-      setIsNetworkCorrect(true)
+  const isNetworkCorrectFunction = (isConnectedFn: any, chainIdFn: any) => {
+    if(isConnectedFn) {
+      if(isETH) {
+        return chainIdFn == eth_mainnet_network
+      } else {
+        return chainIdFn == bnb_mainnet_network
+      }
     }
+    return true
+  }
+  
+  useEffect(() => {
+    let isNetworkCorrect = isNetworkCorrectFunction(isConnected, chainId)
+
+    setIsNetworkCorrect(isNetworkCorrect)
   }, [chainId, isConnected])
   
   const getUSDprice = async () => {

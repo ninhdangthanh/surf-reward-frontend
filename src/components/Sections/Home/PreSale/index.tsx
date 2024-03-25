@@ -77,7 +77,7 @@ const PreSale = () => {
               Token Audit
             </ButtonPrimary>
             <ButtonPrimary className="btn btn-pitch">Pitch Deck</ButtonPrimary>
-            <button style={{color: 'white', borderColor: 'white'}} onClick={() => handleLanguageChange('vi')}> Switch language</button>
+            {/* <button style={{color: 'white', borderColor: 'white'}} onClick={() => handleLanguageChange('vi')}> Switch language</button> */}
           </div>
         </div>
         <WagmiProvider config={config}>

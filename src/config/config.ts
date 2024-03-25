@@ -1,8 +1,8 @@
 "use client";
 
-import { http, createConfig, webSocket } from 'wagmi'
-import { base, mainnet, sepolia, goerli } from 'wagmi/chains'
-import { coinbaseWallet } from 'wagmi/connectors'
+import { http, createConfig, webSocket } from '@wagmi/core'
+import { base, mainnet, sepolia, goerli } from '@wagmi/core/chains'
+import { coinbaseWallet } from '@wagmi/connectors'
 import { metaMask } from '@wagmi/connectors'
 import { walletConnect } from '@wagmi/connectors'
 
