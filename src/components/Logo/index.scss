@@ -1,0 +1,7 @@
+.logo {
+    @apply flex flex-col items-center justify-center cursor-pointer;
+
+    background: var(--gradient-surf);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

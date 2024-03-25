@@ -1,0 +1,11 @@
+.how-it-work-title {
+  @apply text-[30px] md:text-[36px] xl:text-[2.9rem] text-[#c5cfd9] font-semibold leading-[1.2];
+
+  &-gradient {
+    padding-right: 0.05em;
+    background-image: linear-gradient(289deg, #9333ea, #c084fc 12%, #fca9a9);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}

@@ -1,0 +1,75 @@
+.section-title {
+  @apply text-center text-[64px] lg:text-[80px] xl:text-[6.5rem] font-bold flex flex-col leading-none text-[#c5cfd9];
+
+  &-gradient-second {
+    background-image: linear-gradient(321deg, #c084fc 23%, #db2777 87%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.grid-box {
+  background-color: #2f363d;
+  background-image: -webkit-gradient(
+      linear,
+      left bottom,
+      left top,
+      from(#0d1117),
+      color-stop(15%, rgba(13, 17, 23, 0))
+    ),
+    -webkit-gradient(linear, left top, left bottom, from(#0d1117), color-stop(15%, rgba(13, 17, 23, 0))),
+    radial-gradient(
+      circle farthest-side at 50% 0%,
+      rgba(13, 17, 23, 0),
+      #0d1117
+    ),
+    url(../../../../assets/svg/bg-tile-dark.svg);
+  background-image: linear-gradient(0deg, #0d1117, rgba(13, 17, 23, 0) 15%),
+    linear-gradient(180deg, #0d1117, rgba(13, 17, 23, 0) 15%),
+    radial-gradient(
+      circle farthest-side at 50% 0%,
+      rgba(13, 17, 23, 0),
+      #0d1117
+    ),
+    url(../../../../assets/svg/bg-tile-dark.svg);
+  background-position: 0px 0px, 0px 0px, 0px 0px, -1px -1px;
+  background-size: auto, auto, auto, 64px;
+}
+
+// .team-image-container {
+//   @apply m-[1.95rem] mb-0 rounded-xl min-h-[500px];
+
+//   padding-top: 0.25em;
+//   padding-bottom: 0.25em;
+//   border-radius: 18px;
+//   background-image: url(../../../../assets/svg/team-bg-decoration.svg);
+//   background-position: 50% 50%;
+//   background-size: cover;
+// }
+
+.text-gradient {
+  padding-right: 0.05em;
+  background-image: linear-gradient(351deg, #38bdf8 23%, #4f46e5 87%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-title-2 {
+  @apply text-center text-[52px] md:text-[64px] lg:text-[5.2rem] font-semibold bg-clip-text text-[#c5cfd9];
+
+  // background-image: linear-gradient(191deg, rgb(253, 232, 71) 25%, rgb(217, 119, 6) 87%);
+  // -webkit-text-fill-color: transparent;
+}
+
+.section-title-gradient-2 {
+  @apply text-center font-semibold bg-clip-text;
+
+  background-image: linear-gradient(
+    191deg,
+    rgb(253, 232, 71) 25%,
+    rgb(217, 119, 6) 87%
+  );
+  -webkit-text-fill-color: transparent;
+}

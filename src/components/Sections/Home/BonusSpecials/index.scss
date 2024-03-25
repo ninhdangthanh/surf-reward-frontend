@@ -1,0 +1,14 @@
+.bonus-special-title {
+  @apply my-8 text-[38px] xl:text-[2.4rem] text-white font-semibold text-center;
+
+  &-gradient {
+    white-space: normal;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #b16cea, #ff5e69 49%, #ff8a56 75%, #ffa84b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin-right: 3px;
+    padding-bottom: 0;
+    display: inline-block;
+  }
+}

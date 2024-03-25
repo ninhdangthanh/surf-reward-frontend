@@ -1,0 +1,43 @@
+{
+  "name": "surf-reward",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@metamask/providers": "^16.0.0",
+    "@nextui-org/react": "^2.2.10",
+    "@tanstack/react-query": "^5.27.5",
+    "@wagmi/connectors": "^4.1.14",
+    "ethers": "^5.4.0",
+    "framer-motion": "^11.0.12",
+    "i18next": "^23.10.1",
+    "negotiator": "^0.6.3",
+    "next": "14.1.3",
+    "next-i18next": "^15.2.0",
+    "next-translate": "^2.6.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-i18next": "^14.1.0",
+    "react-ink": "^6.5.4",
+    "sass": "^1.71.1",
+    "viem": "^2.8.4",
+    "wagmi": "^2.5.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-svg-inline": "^2.1.6",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}
