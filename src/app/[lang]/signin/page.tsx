@@ -10,9 +10,7 @@ import Loading from '@/components/Loading';
 
 const { PreSale, About, HowItWork, BonusSpecials, SurfToken, RoadMap, Team, FAQs } = HomeSection;
 
-const isConnectWallet = sessionStorage.getItem(STORAGE.IS_CONNECT_WALLET)
-  ? JSON.parse(sessionStorage.getItem(STORAGE.IS_CONNECT_WALLET)!)
-  : '';
+const isConnectWallet = true
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
