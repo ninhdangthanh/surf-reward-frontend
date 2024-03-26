@@ -30,8 +30,8 @@ const eth_mainnet_network = 11155111
 const bnb_mainnet_network = 5
 const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
 const BNBprovider = new ethers.providers.JsonRpcProvider("https://bsc-testnet-rpc.publicnode.com")
-const ETHtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
-const BNBtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
+const ETHtokenAddress = "0x4fB98b3A9Bf43e63DBDad779c691A32Ae234157d";
+const BNBtokenAddress = "0x4fB98b3A9Bf43e63DBDad779c691A32Ae234157d";
 const USDTaAddress = "0x29ed8cE3cA1CcF72838AdC691726603b42d8b799";
 
 // MAINNET
@@ -535,7 +535,7 @@ const PreSaleWallet = () => {
                     <div className="py-6 space-y-12">
                       {isETH ? <Input
                         type="number"
-                        label={`ETH you will pay`}
+                        label={`${switchToken == 'USDT' ? 'USDT' : 'ETH'} you will pay`}
                         value={`${amountInput}`}
                         onChange={(e) => onChangeAmountInput(Number(e.target.value))}
                         placeholder="Enter amount"
@@ -552,7 +552,7 @@ const PreSaleWallet = () => {
                       /> :  
                       <Input
                         type="number"
-                        label={`BNB you will pay`}
+                        label={`${switchToken == 'USDT' ? 'USDT' : 'BNB'} you will pay`}
                         value={`${amountInput}`}
                         onChange={(e) => onChangeAmountInput(Number(e.target.value))}
                         placeholder="Enter amount"

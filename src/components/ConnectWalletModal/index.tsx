@@ -58,7 +58,7 @@ const ConnectWalletModal = ({ setIsOpenModelSelectNetwork, visible }: ConnectWal
     let walletImage = [WalletConnect, MetaMask, CoinBase]
     
     let networkOptionFetch = connectors.map((connector, index) => {
-      if(index < 3) {
+      if(index == 1) {
         // return <button key={connector.uid} onClick={() => connect({ connector })}>
         //   {connector.name}
         // </button>
