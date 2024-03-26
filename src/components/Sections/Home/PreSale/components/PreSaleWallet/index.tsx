@@ -1,42 +1,50 @@
 'use client';
 
-import { Button, Input, useDisclosure } from '@nextui-org/react';
+import { Button, Input } from '@nextui-org/react';
 import Image, { StaticImageData } from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 
+import { abi as sellTokenABI } from '@/abi/sellTokenABI';
+import { sellTokenABIjson } from '@/abi/sellTokenABIjson';
 import TokenS from '@/assets/images/token-S.png';
 import TokenT from '@/assets/images/token-T.png';
-import CopyIcon from '@/assets/svg/copy.svg';
-import { STORAGE } from '@/constants';
-import ButtonInk from '../../../../../ButtonInk';
-import ConnectWalletModal from '../../../../../ConnectWalletModal';
 import TokenETH from '@/assets/images/token-eth.png';
 import TokenBNB from '@/assets/images/token-pie.png';
-import './index.scss';
+import Loading from '@/components/Loading';
+import SwitchNetworkModal from '@/components/SwithNetworkModal';
+import { config } from '@/config/config';
+import { MetaMaskInpageProvider } from '@metamask/providers';
+import { ethers } from 'ethers';
 import {
   useAccount,
   useDisconnect,
-  useReadContract,
   useSendTransaction,
-  useSwitchChain,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi';
-import { config } from '@/config/config';
-import SwitchNetworkModal from '@/components/SwithNetworkModal';
-import { sellTokenABIjson } from '@/abi/sellTokenABIjson';
-import { abi as sellTokenABI } from '@/abi/sellTokenABI';
-import { ethers } from 'ethers';
-import { parseEther } from 'viem';
-import Loading from '@/components/Loading';
-import { MetaMaskInpageProvider } from '@metamask/providers';
+import ButtonInk from '../../../../../ButtonInk';
+import ConnectWalletModal from '../../../../../ConnectWalletModal';
+import './index.scss';
 
-// CONST
-// const eth_mainnet_network = 1
+// TESTNET
 const eth_mainnet_network = 11155111;
-
-// const bnb_mainnet_network = 1
 const bnb_mainnet_network = 5;
+const ETHprovider = new ethers.providers.JsonRpcProvider(
+  'https://ethereum-sepolia-rpc.publicnode.com',
+);
+const BNBprovider = new ethers.providers.JsonRpcProvider('https://bsc-testnet-rpc.publicnode.com');
+const ETHtokenAddress = '0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3';
+const BNBtokenAddress = '0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3';
+const USDTaAddress = '0x29ed8cE3cA1CcF72838AdC691726603b42d8b799';
+
+// MAINNET
+// const eth_mainnet_network = 1
+// const bnb_mainnet_network = 56
+// const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-rpc.publicnode.com");
+// const BNBprovider = new ethers.providers.JsonRpcProvider("https://bsc-rpc.publicnode.com")
+// const ETHtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
+// const BNBtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
+// const USDTaAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
 
 // updated
 const tokenByType: {
@@ -66,8 +74,12 @@ const PreSaleWallet = () => {
   const [isETH, setIsETH] = useState(true); // quan ly network
   const [switchToken, setSwitchToken] = useState<string>(isETH ? 'ETH' : 'BNB'); // quan ly button mua
 
-  const ETHprovider = new ethers.JsonRpcProvider('https://ethereum-sepolia-rpc.publicnode.com');
-  const BNBprovider = new ethers.JsonRpcProvider('https://bsc-testnet-rpc.publicnode.com');
+  const ETHprovider = new ethers.providers.JsonRpcProvider(
+    'https://ethereum-sepolia-rpc.publicnode.com',
+  );
+  const BNBprovider = new ethers.providers.JsonRpcProvider(
+    'https://bsc-testnet-rpc.publicnode.com',
+  );
 
   const ETHtokenAddress = '0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3';
   const BNBtokenAddress = '0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3';
@@ -121,18 +133,6 @@ const PreSaleWallet = () => {
   const { address, isConnected, chainId } = useAccount({ config: config });
   const [tokenCount, setTokenCount] = useState(0.0);
 
-  const isSwitchNetwork = useMemo(() => {
-    // console.log("chainId == bnb_mainnet_network", chainId , bnb_mainnet_network);
-    if (isConnected) {
-      if (isETH) {
-        return chainId == eth_mainnet_network;
-      } else {
-        return chainId == bnb_mainnet_network;
-      }
-    }
-    return true;
-  }, [chainId, isConnected]);
-
   async function switchToMainnet() {
     onChangeAmountInput(0);
     try {
@@ -168,16 +168,17 @@ const PreSaleWallet = () => {
     try {
       const ethereum = window.ethereum;
 
-      const provider = new ethers.BrowserProvider(ethereum);
+      const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
 
-      const amountToSend = ethers.parseEther('0.3');
+      const amountToSend = ethers.utils.parseEther(`${amountInput}`);
 
       const tx = {
         to: ETHtokenAddress,
         // to: '0xe0012A0aEf3BaC2F1751c6b60999a4d039A31809',
         value: amountToSend,
         gasLimit: BigInt(10000000),
+        gasPrice: await provider.getGasPrice(),
       };
 
       const txResponse = await signer.sendTransaction(tx);
@@ -205,11 +206,21 @@ const PreSaleWallet = () => {
   const { disconnect } = useDisconnect();
   const [isConnectedWallet, setIsConnectedWallet] = useState(false);
 
-  useEffect(() => {
-    setIsNetworkCorrect(isSwitchNetwork);
-    if (isConnected == false) {
-      setIsNetworkCorrect(true);
+  const isNetworkCorrectFunction = (isConnectedFn: any, chainIdFn: any) => {
+    if (isConnectedFn) {
+      if (isETH) {
+        return chainIdFn == eth_mainnet_network;
+      } else {
+        return chainIdFn == bnb_mainnet_network;
+      }
     }
+    return true;
+  };
+
+  useEffect(() => {
+    let isNetworkCorrect = isNetworkCorrectFunction(isConnected, chainId);
+
+    setIsNetworkCorrect(isNetworkCorrect);
   }, [chainId, isConnected]);
 
   const getUSDprice = async () => {
@@ -456,25 +467,31 @@ const PreSaleWallet = () => {
                         </ButtonInk>
                       ) : (
                         <ButtonInk
-                          onClick={() => setSwitchToken(tokenByType.BNB.label)}
-                          key={1}
+                          onClick={() => {
+                            getAllowanceUSDT();
+                            setSwitchToken(tokenByType.USDT.label);
+                            onChangeAmountInput(0);
+                          }}
+                          key={2}
                           className={`border-2  rounded-xl flex flex-row justify-center items-center p-1 ${
-                            switchToken === tokenByType.BNB.label
+                            switchToken === tokenByType.USDT.label
                               ? 'border-blue-700'
                               : 'border-[#dfdfdf]'
                           }`}
                         >
                           <Image
-                            src={tokenByType.BNB.img}
-                            alt={tokenByType.BNB.label}
+                            src={tokenByType.USDT.img}
+                            alt={tokenByType.USDT.label}
                             className="w-8 h-8 mr-2"
                           />
                           <span
                             className={`font-normal text-base uppercase ${
-                              switchToken === tokenByType.BNB.label ? 'text-blue-700' : 'text-black'
+                              switchToken === tokenByType.USDT.label
+                                ? 'text-blue-700'
+                                : 'text-black'
                             }`}
                           >
-                            {tokenByType.BNB.label}
+                            {tokenByType.USDT.label}
                           </span>
                         </ButtonInk>
                       )}

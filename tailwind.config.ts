@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss';
-const defaultTheme = require('tailwindcss/defaultTheme');
 const { nextui } = require('@nextui-org/react');
 
 const config: Config = {
@@ -25,7 +24,6 @@ const config: Config = {
       },
     },
     screens: {
-      ...defaultTheme.screens,
 
       xs: '480px',
       // => @media (min-width: 480px) { ... }

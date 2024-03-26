@@ -6,13 +6,14 @@ import './index.scss';
 import PreSaleWallet from './components/PreSaleWallet';
 import ButtonPrimary from '../../../ButtonPrimary';
 
+// updated
+
 import { config } from '@/config/config';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { usePathname, useRouter } from 'next/navigation';
 
 const queryClient = new QueryClient();
-
-// updated
 
 const PreSale = () => {
   const [activeText, setActiveText] = useState<string>('SURF');
@@ -51,7 +52,7 @@ const PreSale = () => {
               </h1>
             ))}
           </div>
-          <div className="grid md:grid-cols-3 xl:grid-cols-3 gap-3 pb-[96px]">
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-3 pb-[96px]">
             <ButtonPrimary className="btn btn-whitepaper flex items-center justify-center">
               <div>Whitepaper</div>
             </ButtonPrimary>

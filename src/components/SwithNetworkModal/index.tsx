@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
+import { Modal, ModalContent } from '@nextui-org/react';
 
 const SwitchNetworkModal = (props: any) => {
   return (

@@ -1,20 +1,18 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
-import "./index.scss";
-import Logo from "@/assets/images/surf-reward-logo.png";
-import CloseSvg from "@/assets/svg/close.svg";
-import MenuSvg from "@/assets/svg/menu.svg";
+import './index.scss';
+import Logo from '@/assets/images/surf-reward-logo.png';
+import CloseSvg from '@/assets/svg/close.svg';
+import MenuSvg from '@/assets/svg/menu.svg';
 // import Logo from "@/components/Logo";
-import { PATH_NAME } from "@/constants";
-import SECTION_HOME_PAGE_KEY from "@/constants/sectionsKey";
-import { useOnClickOutside } from "@/hooks/useOnClickOutside";
-import ButtonPrimary from "../../../ButtonPrimary";
-
-// updated
+import { PATH_NAME } from '@/constants';
+import SECTION_HOME_PAGE_KEY from '@/constants/sectionsKey';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
+import ButtonPrimary from '../../../ButtonPrimary';
 
 const navigation = [
   {

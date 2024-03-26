@@ -7,15 +7,16 @@ import { HomeSection } from '@/components';
 import { STORAGE } from '@/constants';
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loading from '@/components/Loading';
-// updated
+import useTranslate from '@/hooks/useTranslate';
+
 const { PreSale, About, HowItWork, BonusSpecials, SurfToken, RoadMap, Team, FAQs } = HomeSection;
 
-const isConnectWallet = sessionStorage.getItem(STORAGE.IS_CONNECT_WALLET)
-  ? JSON.parse(sessionStorage.getItem(STORAGE.IS_CONNECT_WALLET)!)
-  : '';
+const isConnectWallet = true;
 
-export default function Home() {
+export default function Home({ params: { lang } }: { params: { lang: string } }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const currentLocale = useTranslate(lang);
 
   useEffect(() => {
     if (!isConnectWallet) {
@@ -32,9 +33,9 @@ export default function Home() {
   return (
     <NextUIProvider>
       <main className="w-full bg-gray-900 min-h-screen">
-        <div className="h-[60px] bg-blue-500 flex justify-center items-center">
-          <span className="text-white text-[10px] md:text-xs font-semibold uppercase text-center">
-            WELCOME TO SURF REWARD - BIGGEST PRESALE 2023! WHAT DO YOU THINK? 100X OR MORE!?
+        <div className="h-[60px] bg-blue-500 flex justify-center items-center px-4">
+          <span className="text-white text-xs font-semibold uppercase text-center">
+            {currentLocale.header.greeting}
           </span>
         </div>
         <DefaultLayout>
