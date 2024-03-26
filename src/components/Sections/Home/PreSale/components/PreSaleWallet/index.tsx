@@ -27,15 +27,13 @@ import ConnectWalletModal from '../../../../../ConnectWalletModal';
 import './index.scss';
 
 // TESTNET
-const eth_mainnet_network = 11155111;
-const bnb_mainnet_network = 5;
-const ETHprovider = new ethers.providers.JsonRpcProvider(
-  'https://ethereum-sepolia-rpc.publicnode.com',
-);
-const BNBprovider = new ethers.providers.JsonRpcProvider('https://bsc-testnet-rpc.publicnode.com');
-const ETHtokenAddress = '0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3';
-const BNBtokenAddress = '0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3';
-const USDTaAddress = '0x29ed8cE3cA1CcF72838AdC691726603b42d8b799';
+const eth_mainnet_network = 11155111
+const bnb_mainnet_network = 5
+const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
+const BNBprovider = new ethers.providers.JsonRpcProvider("https://bsc-testnet-rpc.publicnode.com")
+const ETHtokenAddress = "0x4fB98b3A9Bf43e63DBDad779c691A32Ae234157d";
+const BNBtokenAddress = "0x4fB98b3A9Bf43e63DBDad779c691A32Ae234157d";
+const USDTaAddress = "0x29ed8cE3cA1CcF72838AdC691726603b42d8b799";
 
 // MAINNET
 // const eth_mainnet_network = 1
@@ -555,6 +553,7 @@ const PreSaleWallet = () => {
                     )}
 
                     <div className="py-6 space-y-12">
+<<<<<<< HEAD
                       {isETH ? (
                         <Input
                           type="number"
@@ -592,6 +591,42 @@ const PreSaleWallet = () => {
                           }
                         />
                       )}
+=======
+                      {isETH ? <Input
+                        type="number"
+                        label={`${switchToken == 'USDT' ? 'USDT' : 'ETH'} you will pay`}
+                        value={`${amountInput}`}
+                        onChange={(e) => onChangeAmountInput(Number(e.target.value))}
+                        placeholder="Enter amount"
+                        labelPlacement="outside"
+                        size="lg"
+                        step="0.001"
+                        endContent={
+                          <Image
+                            src={tokenByType[switchToken].img}
+                            alt={tokenByType[switchToken].label}
+                            className="w-8 h-8 mr-2"
+                          />
+                        }
+                      /> :  
+                      <Input
+                        type="number"
+                        label={`${switchToken == 'USDT' ? 'USDT' : 'BNB'} you will pay`}
+                        value={`${amountInput}`}
+                        onChange={(e) => onChangeAmountInput(Number(e.target.value))}
+                        placeholder="Enter amount"
+                        labelPlacement="outside"
+                        size="lg"
+                        step="0.001"
+                        endContent={
+                          <Image
+                            src={tokenByType[switchToken].img}
+                            alt={tokenByType[switchToken].label}
+                            className="w-8 h-8 mr-2"
+                          />
+                        }
+                      />}
+>>>>>>> 67f6556b81e7d4c048626e542e73fcdd7ff84e29
 
                       <Input
                         type="number"

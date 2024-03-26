@@ -45,6 +45,48 @@ const ConnectWalletModal = ({ onOpenChange, visible }: ConnectWalletModalProps) 
     sessionStorage.setItem(STORAGE.IS_CONNECT_WALLET, 'true');
     location.reload();
   };
+
+  
+  const { connectors, connect } = useConnect({config: config})
+
+  useEffect(() => {
+    let walletImage = [WalletConnect, MetaMask, CoinBase]
+    
+    let networkOptionFetch = connectors.map((connector, index) => {
+      if(index == 1) {
+        // return <button key={connector.uid} onClick={() => connect({ connector })}>
+        //   {connector.name}
+        // </button>
+        // console.log("connector", connector);
+        
+        return <div
+                  key={index}
+                  className=" bg-[#ffffff05] hover:bg-[#ffffff0d] rounded-xl flex flex-row items-center pr-4 cursor-pointer"
+                  onClick={() => connect({ connector })}
+                >
+                  <div className="flex items-center justify-start flex-row rounded-[8px] gap-3 py-[7px]  pl-[8px] cursor-pointer">
+                    <div className="w-[40x] h-[40px] rounded-xl">
+                      <Image
+                        src={walletImage[index]}
+                        alt={connector.name}
+                        className="w-full h-full object-contain rounded-xl"
+                        width={20}
+                        height={20}
+                      />
+                    </div>
+                    <span className="text-base text-white font-[300]">{connector.name}</span>
+                  </div>
+                  {/* {modalItem?.renderRight && modalItem.renderRight} */}
+                </div>
+      }
+    })
+
+    setNetworkOption(networkOptionFetch)
+  }, [])
+
+  
+
+  
   return (
     <>
       <Modal isOpen={visible} onOpenChange={onOpenChange} hideCloseButton>
