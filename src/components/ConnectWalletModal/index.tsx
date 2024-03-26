@@ -55,7 +55,7 @@ const ConnectWalletModal = ({ setIsOpenModelSelectNetwork, visible }: ConnectWal
   const { connectors, connect } = useConnect({config: config})
 
   useEffect(() => {
-    let walletImage = ["/qrwallet.jpg", "/metamask.jpg", "/coinbase.jpg"]
+    let walletImage = [WalletConnect, MetaMask, CoinBase]
     
     let networkOptionFetch = connectors.map((connector, index) => {
       if(index < 3) {
