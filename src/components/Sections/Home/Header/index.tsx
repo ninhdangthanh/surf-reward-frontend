@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
@@ -16,39 +16,39 @@ import ButtonPrimary from '../../../ButtonPrimary';
 
 const navigation = [
   {
-    label: 'What is SURF?',
+    label: "What is SURF?",
     slug: SECTION_HOME_PAGE_KEY.WHAT_IS_SURF,
   },
   {
-    label: 'How it works',
+    label: "How it works",
     slug: SECTION_HOME_PAGE_KEY.HOW_IT_WORK,
   },
   {
-    label: 'Bonus Specials',
+    label: "Bonus Specials",
     slug: SECTION_HOME_PAGE_KEY.BONUS_SPECIALS,
   },
   {
-    label: 'RoadMap',
+    label: "RoadMap",
     slug: SECTION_HOME_PAGE_KEY.ROAD_MAP,
   },
   {
-    label: 'Team',
+    label: "Team",
     slug: SECTION_HOME_PAGE_KEY.TEAM,
   },
   {
-    label: 'Contact',
+    label: "Contact",
     slug: SECTION_HOME_PAGE_KEY.CONTACT,
   },
   {
-    label: 'Staking',
+    label: "Staking",
     path: PATH_NAME.STAKING,
   },
   {
-    label: 'Jobs',
+    label: "Jobs",
     path: PATH_NAME.JOBS,
   },
   {
-    label: 'Demo',
+    label: "Demo",
     path: PATH_NAME.DEMO,
   },
 ];
@@ -63,9 +63,10 @@ const Header = () => {
   const [keyActive, setKeyActive] = useState<number>();
 
   useEffect(() => {
-    window.addEventListener('resize', handleCloseSidebarWhenResize);
+    window.addEventListener("resize", handleCloseSidebarWhenResize);
 
-    return () => window.removeEventListener('resize', handleCloseSidebarWhenResize);
+    return () =>
+      window.removeEventListener("resize", handleCloseSidebarWhenResize);
   }, [isOpenSidebar]);
 
   useOnClickOutside(menuContainer, (e) => setIsOpenSidebar(false));
@@ -75,7 +76,7 @@ const Header = () => {
 
     if (targetPageSection) {
       targetPageSection.scrollIntoView({
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -85,7 +86,7 @@ const Header = () => {
     if (
       value.currentTarget &&
       value.currentTarget?.innerWidth &&
-      value.currentTarget.innerWidth > 1200 &&
+      value.currentTarget.innerWidth > 1024 &&
       isOpenSidebar
     ) {
       setIsOpenSidebar(false);
@@ -120,7 +121,7 @@ const Header = () => {
         <Image
           src={Logo}
           alt="SURF Reward"
-          className="w-[130px] xl:w-[150px] h-auto cursor-pointer"
+          className="w-[100px] md:w-[130px] xl:w-[150px] h-auto cursor-pointer"
           onClick={() => router.push(PATH_NAME.HOME)}
         />
         {/* <Logo /> */}
@@ -134,9 +135,13 @@ const Header = () => {
               }}
             >
               <a
-                onClick={() => handleScrollCurrentSectionOrNavigationCurrentPath(nav as any)}
+                onClick={() =>
+                  handleScrollCurrentSectionOrNavigationCurrentPath(nav as any)
+                }
                 className={`text-[15.5px] hover:text-[#3b82f6] transition duration-200 ease-linear p-1 cursor-pointer  ${
-                  keyActive === index || pathname === nav.path ? 'text-[#3b82f6]' : 'text-[#C5CFC9]'
+                  keyActive === index || pathname === nav.path
+                    ? "text-[#3b82f6]"
+                    : "text-[#C5CFC9]"
                 }`}
               >
                 {nav.label}
@@ -153,7 +158,7 @@ const Header = () => {
             src={isOpenSidebar ? CloseSvg : MenuSvg}
             alt="Menu Svg"
             className={`w-12 h-12 p-3 object-contain cursor-pointer lg:hidden transition-all duration-250 select-none ${
-              isOpenSidebar && 'pointer-events-none'
+              isOpenSidebar && "pointer-events-none"
             }`}
           />
         </div>
@@ -169,13 +174,16 @@ const Header = () => {
                   onClick={() => {
                     toggleOpenSidebar();
                     setKeyActive(index);
-                    nav?.slug && handleScrollToSectionPage(nav.slug);
                   }}
                 >
                   <a
-                    href={nav?.slug ? `#` : nav?.path}
+                    onClick={() =>
+                      handleScrollCurrentSectionOrNavigationCurrentPath(
+                        nav as any
+                      )
+                    }
                     className={`py-2.5 block cursor-pointer  hover:text-[#3b82f6] transition-all text-sm w-fit ${
-                      keyActive === index ? 'text-[#3b82f6]' : 'text-[#C5CFC9]'
+                      keyActive === index ? "text-[#3b82f6]" : "text-[#C5CFC9]"
                     }`}
                   >
                     {nav.label}
