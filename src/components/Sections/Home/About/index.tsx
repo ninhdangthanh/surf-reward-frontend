@@ -1,26 +1,24 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-import TokenSSvg from "@/assets/svg/Gruppe-7.svg";
-import SectionDivider from "../../../SectionDivider";
-import AboutCoin from "@/assets/images/about-coin.jpeg";
-import BgFadeBlue from "@/assets/svg/fade-bg-blue.svg";
+import TokenSSvg from '@/assets/svg/Gruppe-7.svg';
+import SectionDivider from '../../../SectionDivider';
+import AboutCoin from '@/assets/images/about-coin.jpeg';
+import BgFadeBlue from '@/assets/svg/fade-bg-blue.svg';
 
-import FinanceBrokerageLogo from "@/assets/images/finance_brokerage.png";
-import BitcoinComFarbe2Logo from "@/assets/images/bitcoin_com_farbe2.png";
-import AmbCryptoFarbe3Logo from "@/assets/images/amb_crypto_farbe3.png";
-import BitcoinistFarbeLogo from "@/assets/images/bitcoinist_farbe.png";
-import NewsbtcFarbeLogo from "@/assets/images/newsbtc_farbe.png";
-import CoinspeakerFarbe2Logo from "@/assets/images/coinspeaker_farbe2.png";
-import DigitalJournalFarbeLogo from "@/assets/images/digital_journal_farbe.png";
-import MarketwatchFarbe2Logo from "@/assets/images/marketwatch_farbe2.png";
-import YahooFinanceFarbeLogo from "@/assets/images/yahoo_finance_farbe.png";
-import ZycryptoFarbeLogo from "@/assets/images/zycrypto_farbe.png";
-import "./index.scss";
-import SliderShow from "../../../SliderShow";
-import Container from "../../../Container";
-import SECTION_HOME_PAGE_KEY from "@/constants/sectionsKey";
-
-// updated
+import FinanceBrokerageLogo from '@/assets/images/finance_brokerage.png';
+import BitcoinComFarbe2Logo from '@/assets/images/bitcoin_com_farbe2.png';
+import AmbCryptoFarbe3Logo from '@/assets/images/amb_crypto_farbe3.png';
+import BitcoinistFarbeLogo from '@/assets/images/bitcoinist_farbe.png';
+import NewsbtcFarbeLogo from '@/assets/images/newsbtc_farbe.png';
+import CoinspeakerFarbe2Logo from '@/assets/images/coinspeaker_farbe2.png';
+import DigitalJournalFarbeLogo from '@/assets/images/digital_journal_farbe.png';
+import MarketwatchFarbe2Logo from '@/assets/images/marketwatch_farbe2.png';
+import YahooFinanceFarbeLogo from '@/assets/images/yahoo_finance_farbe.png';
+import ZycryptoFarbeLogo from '@/assets/images/zycrypto_farbe.png';
+import './index.scss';
+import SliderShow from '../../../SliderShow';
+import Container from '../../../Container';
+import SECTION_HOME_PAGE_KEY from '@/constants/sectionsKey';
 
 const About = () => {
   const brandLogos = [
@@ -42,12 +40,7 @@ const About = () => {
           <div className="container mx-auto py-16 xl:py-[96px] px-8">
             <div className="grid lg:grid-cols-2 justify-end items-center mt-9 w-4/5 md:3/5 lg:w-full mx-auto">
               <div>
-                <SectionDivider
-                  prefix="01"
-                  suffix="SURF REWARD"
-                  middle="·"
-                  position="left"
-                />
+                <SectionDivider prefix="01" suffix="SURF REWARD" middle="·" position="left" />
                 <Image
                   src={TokenSSvg}
                   alt=""
@@ -58,23 +51,21 @@ const About = () => {
                 <div className="max-w-[542px]">
                   <div className="flex flex-row gap-2.5 leading-[1.8]">
                     <h3 className="text-gray-100 text-[30px] md:text-[36px] xl:text-[41px] font-semibold">
-                      What is{' '}
-                      <span className="text-[30px] md:text-[36px] xl:text-[43px] font-semibold text-gradient">
-                        SURF Reward?
-                      </span>
+                      What is
+                    </h3>
+                    <h3 className="text-[30px] md:text-[36px] xl:text-[43px] font-semibold text-gradient">
+                      SURF Reward?
                     </h3>
                   </div>
                   <p className="text-xl xl:text-[23px] text-gray-400 mb-9 leading-[1.5]">
-                    SURF Reward offers an extension for all major browsers. It
-                    removes a large part of the advertising on the Internet and
-                    exchanges individual advertising spaces with its own
-                    advertising partners. From now on, the profit goes not to
-                    the webmaster, but to you!
+                    SURF Reward offers an extension for all major browsers. It removes a large part
+                    of the advertising on the Internet and exchanges individual advertising spaces
+                    with its own advertising partners. From now on, the profit goes not to the
+                    webmaster, but to you!
                   </p>
                   <p className="text-xl xl:text-[23px] text-[#008000] leading-[1.5]">
-                    By the way: Did you know that after the press release, over
-                    30 websites in 6 languages wrote over 50 articles about us
-                    and recommended us?
+                    By the way: Did you know that after the press release, over 30 websites in 6
+                    languages wrote over 50 articles about us and recommended us?
                   </p>
                 </div>
               </div>

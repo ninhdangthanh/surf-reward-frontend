@@ -13,6 +13,7 @@ const { PreSale, About, HowItWork, BonusSpecials, SurfToken, RoadMap, Team, FAQs
 
 const isConnectWallet = true;
 
+
 export default function Home({ params: { lang } }: { params: { lang: string } }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -33,7 +34,7 @@ export default function Home({ params: { lang } }: { params: { lang: string } })
   return (
     <NextUIProvider>
       <main className="w-full bg-gray-900 min-h-screen">
-        <div className="h-[60px] bg-blue-500 flex justify-center items-center px-4">
+        <div className="h-[60px] bg-blue-500 flex justify-center items-center">
           <span className="text-white text-xs font-semibold uppercase text-center">
             {currentLocale.header.greeting}
           </span>
