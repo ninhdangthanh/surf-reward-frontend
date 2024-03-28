@@ -8,8 +8,9 @@ import { STORAGE } from '@/constants';
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loading from '@/components/Loading';
 import useTranslate from '@/hooks/useTranslate';
+import dynamic from 'next/dynamic';
 
-const { PreSale, About, HowItWork, BonusSpecials, SurfToken, RoadMap, Team, FAQs } = HomeSection;
+const { PreSale, About, HowItWork, BonusSpecials, SurfToken, Team, FAQs } = HomeSection;
 
 const isConnectWallet = true;
 
@@ -20,7 +21,7 @@ export default function Home({ params: { lang } }: { params: { lang: string } })
 
   useEffect(() => {
     if (!isConnectWallet) {
-      sessionStorage.setItem(STORAGE.IS_CONNECT_WALLET, 'false');
+      // sessionStorage.setItem(STORAGE.IS_CONNECT_WALLET, 'false');
     }
   }, []);
 
@@ -29,6 +30,15 @@ export default function Home({ params: { lang } }: { params: { lang: string } })
       setIsLoading(false);
     }, 3000);
   }, []);
+
+  const RoadMap = dynamic(
+    () => import('@/components/Sections/Home/RoadMap'), {
+    ssr: false
+  });
+  const PreSale = dynamic(
+    () => import('@/components/Sections/Home/PreSale'), {
+    ssr: false
+  });
 
   return (
     <NextUIProvider>
@@ -44,6 +54,7 @@ export default function Home({ params: { lang } }: { params: { lang: string } })
           <HowItWork />
           <BonusSpecials />
           <SurfToken />
+          {/* {(typeof window !== 'undefined') ? <></> : <RoadMap />} */}
           <RoadMap />
           <Team />
           <FAQs />

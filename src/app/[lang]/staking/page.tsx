@@ -13,7 +13,7 @@ const StackingPage = () => {
   const router = useRouter();
 
   const handleLanguageChange = (newLocale: string) => {
-    console.log("router", path);
+    // console.log("router", path);
 
     let thisLanguage = path.slice(1, 3);
     let newPath = path.slice(3, )

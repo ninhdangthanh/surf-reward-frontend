@@ -17,7 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!isConnectWallet) {
-      sessionStorage.setItem(STORAGE.IS_CONNECT_WALLET, 'false');
+      // sessionStorage.setItem(STORAGE.IS_CONNECT_WALLET, 'false');
     }
   }, []);
 

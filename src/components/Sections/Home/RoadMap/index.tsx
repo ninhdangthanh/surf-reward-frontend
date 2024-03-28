@@ -12,11 +12,14 @@ const RoadMap = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [scrollHeight, setScrollHeight] = useState<number>(0);
+  const [windowHeight, setWindowHeight] = useState<any>(0);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
       setScrollHeight(window.scrollY);
     });
+
+    setWindowHeight(window.innerHeight)
 
     return () => {
       removeEventListener("scroll", () => {});
@@ -114,7 +117,7 @@ const RoadMap = () => {
               height: Math.min(
                 scrollHeight -
                   (containerRef.current?.offsetTop || 0) +
-                  window.innerHeight -
+                  windowHeight -
                   100,
                 (containerRef.current?.offsetHeight || 0) +
                   (containerRef.current?.scrollTop || 0)

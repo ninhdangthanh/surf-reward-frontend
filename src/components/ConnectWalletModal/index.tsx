@@ -1,3 +1,5 @@
+"use client"
+
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 import Image from 'next/image';
 
@@ -9,10 +11,13 @@ import MetaMask from '@/assets/webp/metamask.webp';
 import WalletConnect from '@/assets/webp/sufrreward-wallet-connect.webp';
 import TrustWallet from '@/assets/webp/trust-wallet.webp';
 import { STORAGE } from '@/constants';
+import { useConnect } from 'wagmi';
+import { config } from '@/config/config';
+import { useEffect, useState } from 'react';
 
 interface ConnectWalletModalProps {
   visible?: boolean;
-  onOpenChange?: () => void;
+  setIsOpenModelSelectNetwork?: any;
 }
 
 const modalBody = [
@@ -39,11 +44,13 @@ const modalBody = [
   },
 ];
 
-const ConnectWalletModal = ({ onOpenChange, visible }: ConnectWalletModalProps) => {
+const ConnectWalletModal = ({ setIsOpenModelSelectNetwork, visible }: ConnectWalletModalProps) => {
+  const [networkOption, setNetworkOption] = useState<any>()
+  
   const handleConnectWallet = (cb: () => void) => {
     cb();
-    sessionStorage.setItem(STORAGE.IS_CONNECT_WALLET, 'true');
-    location.reload();
+    // sessionStorage.setItem(STORAGE.IS_CONNECT_WALLET, 'true');
+    // location.reload();
   };
 
   
@@ -89,7 +96,7 @@ const ConnectWalletModal = ({ onOpenChange, visible }: ConnectWalletModalProps) 
   
   return (
     <>
-      <Modal isOpen={visible} onOpenChange={onOpenChange} hideCloseButton>
+      <Modal isOpen={visible} onOpenChange={() => setIsOpenModelSelectNetwork(false)} hideCloseButton style={{borderColor: "black"}}>
         <ModalContent className=" max-w-[360px]">
           {(onClose) => (
             <>
@@ -100,34 +107,15 @@ const ConnectWalletModal = ({ onOpenChange, visible }: ConnectWalletModalProps) 
                 <span className="text-white font-medium text-base text-center">Connect Wallet</span>
                 <div
                   className="w-8 h-8 rounded-full hover:bg-[#ffffff0d] hover:cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 flex justify-center items-center"
-                  onClick={onOpenChange}
+                  onClick={() => setIsOpenModelSelectNetwork(false)}
                 >
                   <Image src={TimesSvg} alt="" className="w-[26px] h-[26px] text-white" />
                 </div>
               </ModalHeader>
-              <ModalBody className="bg-[#1e1e1e]">
-                {modalBody.map((modalItem, index) => (
-                  <div
-                    key={index}
-                    className=" bg-[#ffffff05] hover:bg-[#ffffff0d] rounded-xl flex flex-row items-center pr-4 cursor-pointer"
-                    onClick={() => handleConnectWallet(onClose)}
-                  >
-                    <div className="flex items-center justify-start flex-row rounded-[8px] gap-3 py-[7px]  pl-[8px] cursor-pointer">
-                      <div className="w-[40x] h-[40px] rounded-xl">
-                        <Image
-                          src={modalItem.src}
-                          alt={modalItem.title}
-                          className="w-full h-full object-contain rounded-xl"
-                        />
-                      </div>
-                      <span className="text-base text-white font-[300]">{modalItem.title}</span>
-                    </div>
+              <ModalBody className="bg-[#1e1e1e] min-h-[230px]">
+                {networkOption}
 
-                    {modalItem?.renderRight && modalItem.renderRight}
-                  </div>
-                ))}
-
-                <div className=" bg-[#ffffff05] hover:bg-[#ffffff0d] rounded-xl flex flex-row items-center pr-4 cursor-pointer">
+                {/* <div className=" bg-[#ffffff05] hover:bg-[#ffffff0d] rounded-xl flex flex-row items-center pr-4 cursor-pointer">
                   <div className="flex items-center justify-start flex-row rounded-[8px] gap-3 py-[7px]  pl-[8px] cursor-pointer">
                     <div className="w-[40x] h-[40px] bg-[#222b35] border border-[#26374a] flex justify-center items-center rounded-xl p-2">
                       <Image
@@ -142,7 +130,7 @@ const ConnectWalletModal = ({ onOpenChange, visible }: ConnectWalletModalProps) 
                   <div className="bg-[#343535] text-gray-400 px-[6px] py-[3px] rounded-md w-fit ml-auto text-[11.2px] ">
                     380+
                   </div>
-                </div>
+                </div> */}
               </ModalBody>
             </>
           )}

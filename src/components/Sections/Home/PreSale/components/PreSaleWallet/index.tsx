@@ -1,38 +1,34 @@
 'use client';
 
-import { Button, Input } from '@nextui-org/react';
+import { Button, Input, useDisclosure } from '@nextui-org/react';
 import Image, { StaticImageData } from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 
-import { abi as sellTokenABI } from '@/abi/sellTokenABI';
-import { sellTokenABIjson } from '@/abi/sellTokenABIjson';
 import TokenS from '@/assets/images/token-S.png';
 import TokenT from '@/assets/images/token-T.png';
-import TokenETH from '@/assets/images/token-eth.png';
-import TokenBNB from '@/assets/images/token-pie.png';
-import Loading from '@/components/Loading';
-import SwitchNetworkModal from '@/components/SwithNetworkModal';
-import { config } from '@/config/config';
-import { MetaMaskInpageProvider } from '@metamask/providers';
-import { ethers } from 'ethers';
-import {
-  useAccount,
-  useDisconnect,
-  useSendTransaction,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from 'wagmi';
 import ButtonInk from '../../../../../ButtonInk';
 import ConnectWalletModal from '../../../../../ConnectWalletModal';
+import TokenETH from '@/assets/images/token-eth.png';
+import TokenBNB from '@/assets/images/binance.png';
 import './index.scss';
+import { useAccount, useDisconnect, useSendTransaction, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { config } from '@/config/config';
+import SwitchNetworkModal from '@/components/SwithNetworkModal';
+import {sellTokenABIjson} from "@/abi/sellTokenABIjson"
+import {abi as sellTokenABI} from "@/abi/sellTokenABI"
+import {ethers} from "ethers"
+import Loading from '@/components/Loading';
+import { MetaMaskInpageProvider } from '@metamask/providers';
+
+
 
 // TESTNET
 const eth_mainnet_network = 11155111
-const bnb_mainnet_network = 5
+const bnb_mainnet_network = 97
 const ETHprovider = new ethers.providers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com");
 const BNBprovider = new ethers.providers.JsonRpcProvider("https://bsc-testnet-rpc.publicnode.com")
 const ETHtokenAddress = "0x4fB98b3A9Bf43e63DBDad779c691A32Ae234157d";
-const BNBtokenAddress = "0x4fB98b3A9Bf43e63DBDad779c691A32Ae234157d";
+const BNBtokenAddress = "0x0FA8a3254f3Cf7a519752F8c2E3934BC77F59293";
 const USDTaAddress = "0x29ed8cE3cA1CcF72838AdC691726603b42d8b799";
 
 // MAINNET
@@ -44,7 +40,8 @@ const USDTaAddress = "0x29ed8cE3cA1CcF72838AdC691726603b42d8b799";
 // const BNBtokenAddress = "0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3";
 // const USDTaAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
 
-// updated
+
+
 const tokenByType: {
   [key: string]: {
     img: StaticImageData;
@@ -65,23 +62,10 @@ const tokenByType: {
   },
 };
 
-// m chắc là check hết file thay đổi chưua, con lỗi thư viện bỏ, nó tự fix
-
 const PreSaleWallet = () => {
   const [remainingSeconds, setRemainingSeconds] = useState<number>(315703);
-  const [isETH, setIsETH] = useState(true); // quan ly network
+  const [isETH, setIsETH] = useState(true) // quan ly network
   const [switchToken, setSwitchToken] = useState<string>(isETH ? 'ETH' : 'BNB'); // quan ly button mua
-
-  const ETHprovider = new ethers.providers.JsonRpcProvider(
-    'https://ethereum-sepolia-rpc.publicnode.com',
-  );
-  const BNBprovider = new ethers.providers.JsonRpcProvider(
-    'https://bsc-testnet-rpc.publicnode.com',
-  );
-
-  const ETHtokenAddress = '0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3';
-  const BNBtokenAddress = '0x1CE8b92c599c4b45306D33309d1EbD47dbCA7bf3';
-  const USDTaAddress = '0x29ed8cE3cA1CcF72838AdC691726603b42d8b799';
 
   const tokenABI = sellTokenABIjson;
 
@@ -126,128 +110,126 @@ const PreSaleWallet = () => {
     ];
   }, [remainingSeconds]);
   const [startFocusBtnConnectWallet, setStartFocusBtnConnectWallet] = useState<boolean>(false);
+  
+  const [isNetworkCorrect, setIsNetworkCorrect] = useState(false)
+  const { address, isConnected, chainId  } = useAccount({config: config})
+  const [tokenCount, setTokenCount] = useState(0.0)
 
-  const [isNetworkCorrect, setIsNetworkCorrect] = useState(false);
-  const { address, isConnected, chainId } = useAccount({ config: config });
-  const [tokenCount, setTokenCount] = useState(0.0);
 
   async function switchToMainnet() {
-    onChangeAmountInput(0);
+    onChangeAmountInput(0)
     try {
       const ethereum = window.ethereum as MetaMaskInpageProvider;
       // Sepolia
-      await ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0xaa36a7' }],
-      });
-      setIsETH(true);
-      setSwitchToken('ETH');
+      await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0xaa36a7' }] });
+      setIsETH(true)
+      setSwitchToken('ETH')
     } catch (error) {
-      console.error('Lỗi khi chuyển mạng:', error);
+      console.error("Lỗi khi chuyển mạng:", error);
     }
   }
-
+  
   async function switchToBNB() {
     try {
       const ethereum = window.ethereum as MetaMaskInpageProvider;
       // Goerli
-      await ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x5' }],
-      });
-      setIsETH(false);
-      setSwitchToken('BNB');
+      await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x61' }] });
+      setIsETH(false)
+      setSwitchToken('BNB')
     } catch (error) {
-      console.error('Lỗi khi chuyển mạng:', error);
+      console.error("Lỗi khi chuyển mạng:", error);
     }
   }
 
   async function buyWithETH() {
     try {
       const ethereum = window.ethereum;
-
+  
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
 
       const amountToSend = ethers.utils.parseEther(`${amountInput}`);
 
       const tx = {
-        to: ETHtokenAddress,
-        // to: '0xe0012A0aEf3BaC2F1751c6b60999a4d039A31809',
-        value: amountToSend,
-        gasLimit: BigInt(10000000),
-        gasPrice: await provider.getGasPrice(),
+          to: isETH ? ETHtokenAddress : BNBtokenAddress,
+          // to: '0xe0012A0aEf3BaC2F1751c6b60999a4d039A31809',
+          value: amountToSend,
+          gasLimit: BigInt(10000000),
+          gasPrice: await provider.getGasPrice()
       };
 
       const txResponse = await signer.sendTransaction(tx);
 
-      console.log('tx hash: ', txResponse);
+      // console.log("tx hash: ", txResponse);
+      
 
       await txResponse.wait();
 
-      console.log('Transaction sent successfully.');
+      // console.log("Transaction sent success(fully.");
+  
     } catch (error) {
-      console.error('Error sending:', error);
+      console.error("Error sending:", error);
     }
   }
+  
 
-  const [isOpenModelSelectNetwork, setIsOpenModelSelectNetwork] = useState(false);
-  const [amountInput, setAmountInput] = useState(0.0);
-  const [inputApprove, setInputApprove] = useState(0.0);
-  const [oneUsdToToken, setOneUsdToToken] = useState(0);
-  const [ETHprice, setETHprice] = useState(0);
-  const [allowanceUSDTShow, setAllowanceUSDTShow] = useState(0);
-  const [allowaneLoading, setAllowaneLoading] = useState(false);
+  const [isOpenModelSelectNetwork, setIsOpenModelSelectNetwork] = useState(false)
+  const [amountInput, setAmountInput] = useState(0.0)
+  const [inputApprove, setInputApprove] = useState(0.0)
+  const [oneUsdToToken, setOneUsdToToken] = useState(0)
+  const [ETHprice, setETHprice] = useState(0)
+  const [allowanceUSDTShow, setAllowanceUSDTShow] = useState(0)
+  const [allowaneLoading, setAllowaneLoading] = useState(false)
 
-  const { data: hash, sendTransaction } = useSendTransaction();
+  const { data: hash, sendTransaction } = useSendTransaction() 
 
-  const { disconnect } = useDisconnect();
-  const [isConnectedWallet, setIsConnectedWallet] = useState(false);
+  const { disconnect } = useDisconnect()
+  const [isConnectedWallet, setIsConnectedWallet] = useState(false)
 
   const isNetworkCorrectFunction = (isConnectedFn: any, chainIdFn: any) => {
-    if (isConnectedFn) {
-      if (isETH) {
-        return chainIdFn == eth_mainnet_network;
+    if(isConnectedFn) {
+      if(isETH) {
+        return chainIdFn == eth_mainnet_network
       } else {
-        return chainIdFn == bnb_mainnet_network;
+        return chainIdFn == bnb_mainnet_network
       }
     }
-    return true;
-  };
-
+    return true
+  }
+  
   useEffect(() => {
-    let isNetworkCorrect = isNetworkCorrectFunction(isConnected, chainId);
+    let isNetworkCorrect = isNetworkCorrectFunction(isConnected, chainId)
 
-    setIsNetworkCorrect(isNetworkCorrect);
-  }, [chainId, isConnected]);
-
+    setIsNetworkCorrect(isNetworkCorrect)
+  }, [chainId, isConnected, isETH])
+  
   const getUSDprice = async () => {
     const oneUsdToToken = await ETHtokenContract.oneUsdToToken();
-    setOneUsdToToken(Number(oneUsdToToken));
-    const getChainlinkDataFeedLatestAnswer =
-      await ETHtokenContract.getChainlinkDataFeedLatestAnswer();
-    setETHprice(Number(getChainlinkDataFeedLatestAnswer));
-  };
+    setOneUsdToToken(Number(oneUsdToToken))
+    const getChainlinkDataFeedLatestAnswer = await ETHtokenContract.getChainlinkDataFeedLatestAnswer();
+    setETHprice(Number(getChainlinkDataFeedLatestAnswer))
+  }
 
   const getAllowanceUSDT = async () => {
     const allowanceUSDT = await USDTcontract.allowance(address, ETHtokenAddress);
-    const USDTallowance = Number(allowanceUSDT) / 10 ** 18;
-    setAllowanceUSDTShow(USDTallowance);
-  };
+    const USDTallowance = Number(allowanceUSDT) / (10 ** 18)
+    setAllowanceUSDTShow(USDTallowance)
+  }
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    hash,
-  });
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = 
+    useWaitForTransactionReceipt({ 
+      hash, 
+    }) 
 
   useEffect(() => {
     // if (isConfirming == false && isConfirmed == true) {
     //   getAllowanceUSDT()
     // }
 
-    if (isConfirming == true) {
-      setAllowaneLoading(false);
+    if(isConfirming == true) {
+      setAllowaneLoading(false)
     }
-  }, [isConfirming, isConfirmed]);
+  }, [isConfirming, isConfirmed])
 
   const buyTokenWithUSDT = async () => {
     try {
@@ -257,37 +239,39 @@ const PreSaleWallet = () => {
         abi: sellTokenABI,
         functionName: 'buyTokenWithUSDT',
         args: [amountInput],
-      });
-      getAllowanceUSDT();
-      onChangeAmountInput(0);
-    } catch (error) {}
-  };
+      })
+      getAllowanceUSDT()
+      onChangeAmountInput(0)
+    } catch (error) {
+      
+    }
+  }
 
-  const { isLoading: isConfirmingBuyTokenWithUSDT, isSuccess: isConfirmdBuyTokenWithUSDT } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
+  const { isLoading: isConfirmingBuyTokenWithUSDT, isSuccess: isConfirmdBuyTokenWithUSDT } = 
+  useWaitForTransactionReceipt({ 
+    hash, 
+  }) 
 
   useEffect(() => {
     // if (isConfirming == false && isConfirmed == true) {
     //   getAllowanceUSDT()
     // }
 
-    if (isConfirmingBuyTokenWithUSDT == true) {
-      setAllowaneLoading(false);
+    if(isConfirmingBuyTokenWithUSDT == true) {
+      setAllowaneLoading(false)
     }
-  }, [isConfirmingBuyTokenWithUSDT, isConfirmdBuyTokenWithUSDT]);
-
+  }, [isConfirmingBuyTokenWithUSDT, isConfirmdBuyTokenWithUSDT])
+  
   useEffect(() => {
-    getUSDprice();
-  }, []);
-
+    getUSDprice()
+  }, [])
+  
   useEffect(() => {
-    setIsConnectedWallet(isConnected);
-    if (isConnected == true) {
-      setIsOpenModelSelectNetwork(false);
+    setIsConnectedWallet(isConnected)
+    if(isConnected == true) {
+      setIsOpenModelSelectNetwork(false)
     }
-  }, [isConnected]);
+  }, [isConnected])
 
   useEffect(() => {
     let timer: any = null;
@@ -298,62 +282,70 @@ const PreSaleWallet = () => {
     return () => clearTimeout(timer);
   }, [startFocusBtnConnectWallet]);
 
+
   const onChangeAmountInput = async (value: number) => {
     setAmountInput(value);
     let token;
-    if (chainId == eth_mainnet_network) {
+    if(chainId ==  eth_mainnet_network) {
       // ETH
       if (switchToken == 'ETH') {
-        token = value * oneUsdToToken * ETHprice;
+        token =  value * oneUsdToToken * ETHprice;
       } else {
         token = value * oneUsdToToken;
       }
     } else {
       // BNB
       if (switchToken == 'BNB' || switchToken == 'ETH') {
-        token = (value * oneUsdToToken * ETHprice) / 6.25;
+        token =  value * oneUsdToToken * ETHprice / 6.25;
       } else {
         token = value * oneUsdToToken;
       }
     }
+    
+    setTokenCount(token)
+  }
 
-    setTokenCount(token);
-  };
+  const { 
+    data: approveHash, 
+    error, 
+    isPending, 
+    writeContract 
+  } = useWriteContract()
 
-  const { data: approveHash, error, isPending, writeContract } = useWriteContract();
-
-  const approveAllowce = async () => {
+  const approveAllowce = async () => { 
     setAllowaneLoading(true);
     writeContract({
       address: USDTaAddress,
       abi: sellTokenABI,
       functionName: 'approve',
       args: [ETHtokenAddress, BigInt(inputApprove * 10 ** 18)],
-    });
-  };
+    })
+  } 
 
-  const { isLoading: isConfirmingApproveHash, isSuccess: isConfirmedApproveHash } =
-    useWaitForTransactionReceipt({
-      hash: approveHash,
-    });
+  const { isLoading: isConfirmingApproveHash, isSuccess: isConfirmedApproveHash } = 
+    useWaitForTransactionReceipt({ 
+      hash: approveHash, 
+    }) 
 
   useEffect(() => {
     // console.log("confirmming");
-
+    
     if (isConfirmingApproveHash == false && isConfirmedApproveHash == true) {
-      getAllowanceUSDT();
+      getAllowanceUSDT()
     }
 
-    if (isConfirmingApproveHash == true) {
-      setAllowaneLoading(false);
+    if(isConfirmingApproveHash == true) {
+      setAllowaneLoading(false)
     }
-  }, [isConfirmingApproveHash, isConfirmedApproveHash]);
+  }, [isConfirmingApproveHash, isConfirmedApproveHash])
+
+
 
   return (
     <>
       {allowaneLoading && <Loading />}
-      <div className="w-full max-w-[500px] flex flex-col justify-center self-center xl:self-stretch px-4 mx-auto">
-        <div className={`w-full mt-24`}>
+      <div className="w-fit flex flex-col justify-center self-center xl:self-stretch  mr-4">
+        <div className={`w-[500px] mt-24`}>
           <div className="bg-blue-700 pb-4 rounded-tl-2xl rounded-tr-2xl px-4 pt-2">
             <div className="text-white">
               <div className="flex flex-row justify-center items-center gap-4">
@@ -400,25 +392,25 @@ const PreSaleWallet = () => {
               <span className="text-[17px] font-[400] text-[#808080] block">
                 USDT RAISED - $690,426/$1,100,000
               </span>
+              {/* <span className="text-[17px] font-[400] text-[#808080] block sm:hidden">
+                Token Address: {isETH ? ETHtokenAddress : BNBtokenAddress}
+              </span> */}
               <div className="text-[#acb8c4] text-center flex flex-col">
                 <div className="text-[#acb8c4] text-center flex flex-col">
                   <span className="font-[300] text-[19px]">
                     Please reload if you cannot see raised Amount
                   </span>
                   <span className="font-[300] text-[19px]">
-                    For {isETH ? 'ETH' : 'BNB'} buyers: Switch to {isETH ? 'BNB/BSC' : 'ETH'} to
-                    activate claiming button
+                    For {isETH? "ETH" : "BNB"} buyers: Switch to {isETH? "BNB/BSC" : "ETH"} to activate claiming button
                   </span>
                 </div>
               </div>
 
-              {isConnectedWallet && (
-                <div>
+                {
+                  isConnectedWallet && <div>
                   <div className="flex flex-row justify-between items-center px-12 py-2">
                     <div className="flex flex-col items-center justify-center">
-                      <span className="text-gray-500 font-[400] text-lg">
-                        Your {isETH ? 'ETH' : 'BNB'} Balance
-                      </span>
+                      <span className="text-gray-500 font-[400] text-lg">Your {isETH ? "ETH" : "BNB"} Balance</span>
                       <span className="text-gray-500 font-[400] text-[15px]">0</span>
                     </div>
                     <div className="flex flex-col items-center justify-center">
@@ -428,20 +420,18 @@ const PreSaleWallet = () => {
                   </div>
 
                   <div className="pt-1 border-t-2 border-gray-1 py-2 px-2">
-                    <div
-                      onClick={async () => {
-                        try {
-                          isETH ? await switchToBNB() : await switchToMainnet();
-                          onChangeAmountInput(0);
-                        } catch (error) {}
-                      }}
-                      className="cursor-pointer text-blue-700 font-medium text-[18.5px] my-3"
-                    >
-                      {isETH ? 'Switch network to buy with BNB' : 'Switch network to buy with ETH'}
+                    <div onClick={async () => {
+                      try {
+                        isETH ? await switchToBNB() : await switchToMainnet()
+                        onChangeAmountInput(0)
+                      } catch (error) {
+                      }
+                      
+                    }} className="cursor-pointer text-blue-700 font-medium text-[18.5px] my-3">
+                      {isETH ? "Switch network to buy with BNB" : "Switch network to buy with ETH"}
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      {isETH ? (
-                        <ButtonInk
+                      {isETH ?  <ButtonInk
                           onClick={() => setSwitchToken(tokenByType.ETH.label)}
                           key={1}
                           className={`border-2  rounded-xl flex flex-row justify-center items-center p-1 ${
@@ -457,18 +447,43 @@ const PreSaleWallet = () => {
                           />
                           <span
                             className={`font-normal text-base uppercase ${
-                              switchToken === tokenByType.ETH.label ? 'text-blue-700' : 'text-black'
+                              switchToken === tokenByType.ETH.label
+                                ? 'text-blue-700'
+                                : 'text-black'
                             }`}
                           >
                             {tokenByType.ETH.label}
                           </span>
-                        </ButtonInk>
-                      ) : (
-                        <ButtonInk
+                        </ButtonInk> : 
+                          <ButtonInk
+                          onClick={() => setSwitchToken(tokenByType.BNB.label)}
+                          key={1}
+                          className={`border-2  rounded-xl flex flex-row justify-center items-center p-1 ${
+                            switchToken === tokenByType.BNB.label
+                              ? 'border-blue-700'
+                              : 'border-[#dfdfdf]'
+                          }`}
+                        >
+                          <Image
+                            src={tokenByType.BNB.img}
+                            alt={tokenByType.BNB.label}
+                            className="w-8 h-8 mr-2"
+                          />
+                          <span
+                            className={`font-normal text-base uppercase ${
+                              switchToken === tokenByType.BNB.label
+                                ? 'text-blue-700'
+                                : 'text-black'
+                            }`}
+                          >
+                            {tokenByType.BNB.label}
+                          </span>
+                        </ButtonInk>}
+                        {isETH && <ButtonInk
                           onClick={() => {
-                            getAllowanceUSDT();
-                            setSwitchToken(tokenByType.USDT.label);
-                            onChangeAmountInput(0);
+                            getAllowanceUSDT()
+                            setSwitchToken(tokenByType.USDT.label)
+                            onChangeAmountInput(0)
                           }}
                           key={2}
                           className={`border-2  rounded-xl flex flex-row justify-center items-center p-1 ${
@@ -491,44 +506,12 @@ const PreSaleWallet = () => {
                           >
                             {tokenByType.USDT.label}
                           </span>
-                        </ButtonInk>
-                      )}
-                      <ButtonInk
-                        onClick={() => {
-                          getAllowanceUSDT();
-                          setSwitchToken(tokenByType.USDT.label);
-                          onChangeAmountInput(0);
-                        }}
-                        key={2}
-                        className={`border-2  rounded-xl flex flex-row justify-center items-center p-1 ${
-                          switchToken === tokenByType.USDT.label
-                            ? 'border-blue-700'
-                            : 'border-[#dfdfdf]'
-                        }`}
-                      >
-                        <Image
-                          src={tokenByType.USDT.img}
-                          alt={tokenByType.USDT.label}
-                          className="w-8 h-8 mr-2"
-                        />
-                        <span
-                          className={`font-normal text-base uppercase ${
-                            switchToken === tokenByType.USDT.label ? 'text-blue-700' : 'text-black'
-                          }`}
-                        >
-                          {tokenByType.USDT.label}
-                        </span>
-                      </ButtonInk>
+                        </ButtonInk>}
                     </div>
 
-                    {switchToken == 'USDT' && (
-                      <div className="mt-[60px] mb-10">
-                        <div className="text-start mt-0">
-                          Confirm the number of tokens you are about to purchase
-                        </div>
-                        <div className="text-start mt-0">
-                          Amount allowance: <strong>{allowanceUSDTShow} USDT</strong>
-                        </div>
+                    {switchToken == 'USDT' && <div className='mt-[60px] mb-10'>
+                      <div className='text-start mt-0'>Confirm the number of tokens you are about to purchase</div>
+                        <div className='text-start mt-0'>Amount allowance: <strong>{allowanceUSDTShow} USDT</strong></div>
                         <Input
                           hidden={false}
                           type="number"
@@ -537,64 +520,23 @@ const PreSaleWallet = () => {
                           placeholder="Enter amount"
                           labelPlacement="outside"
                           size="lg"
-                          step="0.001"
-                          className="mt-2"
+                          step="1"
+                          min={2}
+                          className='mt-2'
                         />
-
+                        
                         <button
                           onClick={() => approveAllowce()}
-                          className={
-                            'bg-blue-600 leading-[0px] h-[22px] mt-4 block rounded-xl w-full py-5 px-2 text-white text-xl'
-                          }
+                          className={"bg-blue-600 leading-[0px] h-[22px] mt-4 block rounded-xl w-full py-5 px-2 text-white text-xl"}                          
                         >
                           Confirm
                         </button>
-                      </div>
-                    )}
+                    </div>}
 
                     <div className="py-6 space-y-12">
-<<<<<<< HEAD
-                      {isETH ? (
-                        <Input
-                          type="number"
-                          label={`ETH you will pay`}
-                          value={`${amountInput}`}
-                          onChange={(e) => onChangeAmountInput(Number(e.target.value))}
-                          placeholder="Enter amount"
-                          labelPlacement="outside"
-                          size="lg"
-                          step="0.001"
-                          endContent={
-                            <Image
-                              src={tokenByType[switchToken].img}
-                              alt={tokenByType[switchToken].label}
-                              className="w-8 h-8 mr-2"
-                            />
-                          }
-                        />
-                      ) : (
-                        <Input
-                          type="number"
-                          label={`BNB you will pay`}
-                          value={`${amountInput}`}
-                          onChange={(e) => onChangeAmountInput(Number(e.target.value))}
-                          placeholder="Enter amount"
-                          labelPlacement="outside"
-                          size="lg"
-                          step="0.001"
-                          endContent={
-                            <Image
-                              src={tokenByType[switchToken].img}
-                              alt={tokenByType[switchToken].label}
-                              className="w-8 h-8 mr-2"
-                            />
-                          }
-                        />
-                      )}
-=======
                       {isETH ? <Input
                         type="number"
-                        label={`${switchToken == 'USDT' ? 'USDT' : 'ETH'} you will pay`}
+                        label={`${switchToken == 'USDT' ? 'USDT' : 'ETH'} you will pay ${switchToken == 'USDT' ? "(natural number and greater than 1)" : "(greater than 0.001)"}`}
                         value={`${amountInput}`}
                         onChange={(e) => onChangeAmountInput(Number(e.target.value))}
                         placeholder="Enter amount"
@@ -626,7 +568,6 @@ const PreSaleWallet = () => {
                           />
                         }
                       />}
->>>>>>> 67f6556b81e7d4c048626e542e73fcdd7ff84e29
 
                       <Input
                         type="number"
@@ -641,54 +582,42 @@ const PreSaleWallet = () => {
                     </div>
 
                     <div className="flex flex-col gap-3">
-                      {switchToken == 'ETH' || switchToken == 'BNB' ? (
-                        <Button
-                          className={
-                            amountInput <= 0
-                              ? 'bg-gray-600 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl'
-                              : 'bg-blue-700 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl'
-                          }
-                          onClick={() => buyWithETH()}
-                          disabled={amountInput <= 0}
-                        >
-                          Buy Now
-                        </Button>
-                      ) : (
-                        <Button
-                          className={
-                            amountInput <= 0 || amountInput > allowanceUSDTShow
-                              ? 'bg-gray-600 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl'
-                              : 'bg-blue-700 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl'
-                          }
-                          onClick={() => buyTokenWithUSDT()}
-                          disabled={amountInput <= 0 || amountInput > allowanceUSDTShow}
-                        >
-                          Buy Now
-                        </Button>
-                      )}
+                      {(switchToken == 'ETH' || switchToken == 'BNB') ? <Button
+                        className={amountInput <= 0 ? "bg-gray-600 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl":
+                        "bg-blue-700 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl"}
+                        onClick={() => buyWithETH()}
+                        disabled={amountInput <= 0}
+                      >
+                        Buy Now
+                      </Button> :
+                      <Button
+                        className={(amountInput <= 0 || amountInput > allowanceUSDTShow) ? "bg-gray-600 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl":
+                        "bg-blue-700 h-[66px] block rounded-xl w-full py-5 px-2 text-white text-xl"}
+                        onClick={() => buyTokenWithUSDT()}
+                        disabled={(amountInput <= 0 || amountInput > allowanceUSDTShow)}
+                      >
+                        Buy Now
+                      </Button>}
                     </div>
                   </div>
                 </div>
-              )}
+                }
               <div className="px-6 space-y-5 mt-10">
-                {!isConnectedWallet && (
-                  <ButtonInk
-                    className="presale-btn-connect-wallet"
-                    onClick={() => setIsOpenModelSelectNetwork(true)}
-                  >
-                    Connect Wallet
-                  </ButtonInk>
-                )}
-                {isConnectedWallet && (
-                  <div className="presale-btn-connect-wallet">
-                    {`${address?.slice(0, 5)}...${address?.slice(37)}`}
+                {
+                  !isConnectedWallet && <ButtonInk className="presale-btn-connect-wallet" onClick={() => setIsOpenModelSelectNetwork(true)}>
+                  Connect Wallet
+                </ButtonInk>
+                }
+                {
+                  isConnectedWallet && <div className="presale-btn-connect-wallet" >
+                    {`${address?.slice(0, 5)}...${address?.slice(37, )}`}
                   </div>
-                )}
-                {isConnectedWallet && (
-                  <ButtonInk className="presale-btn-connect-wallet" onClick={() => disconnect()}>
-                    Disconnect
-                  </ButtonInk>
-                )}
+                }
+                {
+                  isConnectedWallet && <ButtonInk className="presale-btn-connect-wallet" onClick={() => disconnect()}>
+                  Disconnect
+                </ButtonInk>
+                }
                 {/* <div className="flex flex-row flex-1 relative shadow-[gray_3px_5px_5px_1px] rounded-lg">
                   <div className="bg-[#dfdfdf] h-[48px] rounded-lg w-full py-[10px] pl-4 pr-14 flex justify-start items-center">
                     <span className="text-black font-[300] text-start text-[14.5px] line-clamp-1">
@@ -710,17 +639,8 @@ const PreSaleWallet = () => {
         </div>
       </div>
 
-      <ConnectWalletModal
-        visible={isOpenModelSelectNetwork}
-        setIsOpenModelSelectNetwork={setIsOpenModelSelectNetwork}
-      />
-      {!isNetworkCorrect && (
-        <SwitchNetworkModal
-          switchToMainnet={switchToMainnet}
-          switchToBNB={switchToBNB}
-          isETH={isETH}
-        />
-      )}
+      <ConnectWalletModal visible={isOpenModelSelectNetwork} setIsOpenModelSelectNetwork={setIsOpenModelSelectNetwork} />
+      {!isNetworkCorrect && <SwitchNetworkModal switchToMainnet={switchToMainnet} switchToBNB={switchToBNB} isETH={isETH} />}
     </>
   );
 };

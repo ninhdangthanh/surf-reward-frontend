@@ -12,14 +12,22 @@ export const metadata: Metadata = {
   },
 };
 
+if (typeof localStorage !== 'undefined') {
+  localStorage.setItem('key', 'value');
+} else if (typeof sessionStorage !== 'undefined') {
+  // Fallback to sessionStorage if localStorage is not supported
+  sessionStorage.setItem('key', 'value');
+} else {
+  // If neither localStorage nor sessionStorage is supported
+  console.log('Web Storage is not supported in this environment.');
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <>{children}</>
   );
 }

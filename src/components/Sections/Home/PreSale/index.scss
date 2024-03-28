@@ -1,3 +1,11 @@
+:root {
+  --gradient-surf: linear-gradient(139deg, rgb(32, 129, 212), rgb(211, 38, 248) 73%, rgb(213, 36, 247)) text transparent;
+  --gradient-2: radial-gradient(circle farthest-side at -25% -50%, rgb(67, 56, 202), rgba(255, 251, 235, 0)) text,
+    linear-gradient(285deg, rgb(125, 211, 252), rgb(239, 72, 72)) transparent;
+  --gradient-earn: linear-gradient(141deg, rgb(34, 126, 210), rgb(84, 235, 180) 58%, rgb(124, 195, 255)) text
+    transparent;
+}
+
 .presale-grid-view {
   background-color: #56595b;
   background-image: linear-gradient(0deg, #0d1117, rgba(13, 17, 23, 0) 15%),
@@ -28,23 +36,6 @@ h1.presale-gradient-text-EARN {
   -webkit-text-fill-color: transparent;
 }
 
-.btn {
-  @apply text-[22px] md:text-[30px] xl:text-[28px] px-4 py-[20px] font-medium text-white flex items-center justify-center;
-  &.btn-audit {
-    transition: all 0.15s ease-in-out;
-    box-shadow: inset 0 0 0 1px #474f58;
-    // border: 1.5px solid #474f58;
-
-    &:hover {
-      box-shadow: inset 0 0 0 2px #fff;
-      // border: 2px solid #fff;
-    }
-  }
-
-  &.btn-pitch {
-    @apply py-[20px] md:py-[28px] lg:py-[32px] xl:py-[20px];
-  }
-}
 // .btn {
 //   @apply text-[30px] 2xl:text-[34px] px-4 py-[20px] font-medium text-white flex items-center justify-center;
 //   &.btn-audit {

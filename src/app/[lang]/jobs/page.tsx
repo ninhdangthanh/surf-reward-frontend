@@ -40,7 +40,10 @@ const JobsPage = () => {
             Open positions:
           </p>
           {jobs?.map((job, index) => (
-            <JobItem key={index} {...job} />
+            <div className="my-1">
+              <p className="text-xl text-[#c5cfd9] font-bold">{job.title}</p>
+              <p className="text-[#3aecba] text-xs mt-2">{job.desc}</p>
+            </div>
           ))}
           <p className="text-gray-400 text-base xl:text-lg w-[90%] md:w-4/5 mx-auto mt-4">
             If you are interested, you can request the exact job description by email to
@@ -51,20 +54,6 @@ const JobsPage = () => {
         </div>
       </Container>
     </DefaultLayout>
-  );
-};
-
-export interface JobItemProps {
-  title: string;
-  desc: string;
-}
-
-export const JobItem = ({ title, desc }: JobItemProps) => {
-  return (
-    <div className="my-1">
-      <p className="text-xl text-[#c5cfd9] font-bold">{title}</p>
-      <p className="text-[#3aecba] text-xs mt-2">{desc}</p>
-    </div>
   );
 };
 
